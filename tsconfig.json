@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target":  "es5",
+    "sourceMap": true,
+    "outDir": "ts-built"
+  },
+  "files": [
+    "typings/main.d.ts",
+    "app.ts"
+  ]
+}

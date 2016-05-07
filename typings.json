@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "bluebird": "registry:npm/bluebird#3.3.4+20160427051630",
+    "repeat-string": "registry:npm/repeat-string#1.0.0+20160211003958"
+  },
+  "ambientDependencies": {
+    "dotenv": "registry:dt/dotenv#2.0.0+20160327131627",
+    "node": "registry:dt/node#4.0.0+20160505172921",
+    "winston": "registry:dt/winston#0.0.0+20160417152829"
+  }
+}

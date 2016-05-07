@@ -1,0 +1,11 @@
+{
+    "execMap": {
+        "js": "tsc && node"
+    },
+    "ext": "ts",
+    "ignore": [
+        "node_modules",
+        "ts-built"
+    ],
+    "verbose": true
+}

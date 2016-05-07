@@ -1,7 +1,7 @@
 "use strict";
-var dotenv = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.config();
-var config = {
+module.exports = {
     app: {
         port: process.env.APP_PORT,
     },
@@ -9,5 +9,4 @@ var config = {
         level: process.env.LOG_LEVEL,
     },
 };
-module.exports = config;
 //# sourceMappingURL=config.js.map

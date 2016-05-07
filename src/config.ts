@@ -2,7 +2,7 @@ import dotenv = require('dotenv');
 
 dotenv.config();
 
-const config = {
+export = {
   app: {
     port: process.env.APP_PORT,
   },
@@ -10,5 +10,3 @@ const config = {
     level: process.env.LOG_LEVEL,
   },
 };
-
-export = config;

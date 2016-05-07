@@ -8,6 +8,6 @@
   },
   "files": [
     "typings/main.d.ts",
-    "app.ts"
+    "src/app.ts"
   ]
 }

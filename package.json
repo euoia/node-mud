@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node ts-built/app.js",
-    "watch": "nodemon -x \"npm run build\""
+    "watch": "nodemon ts-built/app.js"
   },
   "author": "James Pickard <james.pickard@gmail.com>",
   "license": "ISC",

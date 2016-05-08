@@ -1,3 +1,4 @@
+///<reference path='Persistable.d.ts'/>
 import mongodb = require('mongodb');
 import config = require('./config');
 import Promise = require('bluebird');
@@ -17,8 +18,7 @@ export async function collection (collection: string) {
   });
 }
 
-// TODO: add persistable interface.
-export async function save(obj) {
+export async function save(obj: Persistable) {
   const col = await collection(obj.collection);
 
   return new Promise((resolve, reject) => {
@@ -26,13 +26,12 @@ export async function save(obj) {
 
     col.insert(savingObj, (err, res) => {
       if (err) { return reject(err); }
-      console.log(`Saved to ${obj.collection}`);
       return resolve(res);
     });
   });
 }
 
-export async function findOne(obj) {
+export async function findOne(obj: Persistable) {
   const col = await collection(obj.collection);
 
   return new Promise((resolve, reject) => {

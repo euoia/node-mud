@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments)).next());
     });
 };
+///<reference path='Persistable.d.ts'/>
 const mongodb = require('mongodb');
 const config = require('./config');
 const Promise = require('bluebird');
@@ -27,7 +28,6 @@ function collection(collection) {
     });
 }
 exports.collection = collection;
-// TODO: add persistable interface.
 function save(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         const col = yield collection(obj.collection);
@@ -37,7 +37,6 @@ function save(obj) {
                 if (err) {
                     return reject(err);
                 }
-                console.log(`Saved to ${obj.collection}`);
                 return resolve(res);
             });
         });

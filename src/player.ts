@@ -1,6 +1,7 @@
 ///<reference path='Player.d.ts'/>
 import crypto = require('crypto');
 import Client = require('./client');
+import config = require('./config');
 
 export = class Player {
   collection: string;
@@ -24,14 +25,14 @@ export = class Player {
 
   setPassword (password: string) {
     this.password = crypto
-        .createHmac('sha1', this.salt)
+        .createHmac('sha1', this.salt + config.app.secret)
         .update(password)
         .digest('hex');
   }
 
   checkPassword (password: string) {
     const hashed = crypto
-        .createHmac('sha1', this.salt)
+        .createHmac('sha1', this.salt + config.app.secret)
         .update(password)
         .digest('hex');
 

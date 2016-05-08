@@ -52,7 +52,7 @@ export = async (client: Client) => {
 
   const name = await client.prompt('What is your name? ');
 
-  let player = new Player(name, client);
+  const player = new Player(name, client);
   const playerDoc = await db.findOne(player);
   if (playerDoc === null) {
     return newPlayer(player);

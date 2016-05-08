@@ -1,6 +1,7 @@
 "use strict";
 ///<reference path='Player.d.ts'/>
 const crypto = require('crypto');
+const config = require('./config');
 module.exports = class Player {
     constructor(name, client) {
         this.name = name;
@@ -16,13 +17,13 @@ module.exports = class Player {
     }
     setPassword(password) {
         this.password = crypto
-            .createHmac('sha1', this.salt)
+            .createHmac('sha1', this.salt + config.app.secret)
             .update(password)
             .digest('hex');
     }
     checkPassword(password) {
         const hashed = crypto
-            .createHmac('sha1', this.salt)
+            .createHmac('sha1', this.salt + config.app.secret)
             .update(password)
             .digest('hex');
         return hashed === this.password;

@@ -46,7 +46,7 @@ const newPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
 module.exports = (client) => __awaiter(this, void 0, void 0, function* () {
     client.write(yield readLogo());
     const name = yield client.prompt('What is your name? ');
-    let player = new Player(name, client);
+    const player = new Player(name, client);
     const playerDoc = yield db.findOne(player);
     if (playerDoc === null) {
         return newPlayer(player);

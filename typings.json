@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "bluebird": "registry:npm/bluebird#3.3.4+20160427051630",
+    "lodash": "registry:npm/lodash#4.0.0+20160416211519",
+    "mongodb": "registry:npm/mongodb#2.1.0+20160422172506",
     "repeat-string": "registry:npm/repeat-string#1.0.0+20160211003958"
   },
   "ambientDependencies": {

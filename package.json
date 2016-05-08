@@ -13,6 +13,8 @@
   "dependencies": {
     "bluebird": "^3.3.5",
     "dotenv": "^2.0.0",
+    "lodash": "^4.11.2",
+    "mongodb": "^2.1.18",
     "repeat-string": "^1.5.4",
     "telnet": "0.0.1"
   },

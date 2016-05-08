@@ -3,7 +3,6 @@
     "align": [
       true,
       "parameters",
-      "arguments",
       "statements"
     ],
     "ban": [
@@ -16,8 +15,7 @@
     "class-name": true,
     "comment-format": [
       true,
-      "check-space",
-      "check-lowercase"
+      "check-space"
     ],
     "curly": true,
     "eofline": true,
@@ -27,8 +25,7 @@
       "spaces"
     ],
     "interface-name": [
-      true,
-      "always-prefix"
+      false
     ],
     "jsdoc-format": true,
     "label-position": true,
@@ -71,10 +68,10 @@
       true,
       "check-function-in-method"
       ],
-    "no-null-keyword": true,
-    "no-reference": true,
+    "no-null-keyword": false,
+    "no-reference": false,
     "no-require-imports": false,
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": false,
     "no-string-literal": true,
     "no-switch-case-fall-through": true,
     "no-trailing-whitespace": true,

@@ -1,3 +1,4 @@
+///<reference path='Client.d.ts'/>
 import net = require('net');
 import Promise = require('bluebird');
 
@@ -16,5 +17,9 @@ export = class Client {
         resolve(response.replace(/[\n\r]/g, ''));
       });
     });
+  }
+
+  disconnect () {
+    return this.connection.destroy();
   }
 };

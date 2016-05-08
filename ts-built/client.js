@@ -15,6 +15,9 @@ module.exports = class Client {
             });
         });
     }
+    disconnect() {
+        return this.connection.destroy();
+    }
 }
 ;
 //# sourceMappingURL=client.js.map

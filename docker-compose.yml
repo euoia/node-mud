@@ -1,0 +1,10 @@
+version: '2'
+services:
+  node-mud:
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+  mongo:
+    image: mvertes/alpine-mongo

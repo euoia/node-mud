@@ -11,6 +11,7 @@ const fs = require('fs');
 const Promise = require('bluebird');
 const db = require('./db');
 const Player = require('./Player');
+const world = require('./world');
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
     return new Promise(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
@@ -21,7 +22,7 @@ const existingPlayer = (player) => __awaiter(this, void 0, void 0, function* () 
         player.tell(`Incorrect password.`);
         return player.disconnect();
     }
-    player.tell(`Entering game...`);
+    world.enterWorld(player);
 });
 const newPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
     player.tell(`A new player!`);

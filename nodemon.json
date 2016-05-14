@@ -2,7 +2,7 @@
     "execMap": {
         "js": "tsc && node"
     },
-    "ext": "ts",
+    "ext": "ts,yml",
     "ignore": [
         "node_modules",
         "ts-built"

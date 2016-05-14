@@ -6,8 +6,9 @@
     "sourceMap": true,
     "outDir": "ts-built"
   },
-  "files": [
+  "exclude": [
     "typings/main.d.ts",
-    "src/app.ts"
+    "typings/main",
+    "node_modules"
   ]
 }

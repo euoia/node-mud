@@ -12,11 +12,30 @@ const mongodb = require('mongodb');
 const config = require('./config');
 const Promise = require('bluebird');
 const _ = require('lodash');
-const server = new mongodb.Server(config.mongo.host, config.mongo.port);
-const db = new mongodb.Db('node-mud', server, { w: 1 });
-db.open(function () { });
+const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
+let db = null;
+const checkConnection = () => {
+    if (db === null) {
+        throw new Error('Not connected to database.');
+    }
+};
+function connect() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            mongodb.MongoClient.connect(url, (err, database) => {
+                if (err) {
+                    return reject(err);
+                }
+                db = database;
+                return resolve(null);
+            });
+        });
+    });
+}
+exports.connect = connect;
 function collection(collection) {
     return __awaiter(this, void 0, void 0, function* () {
+        checkConnection();
         return new Promise((resolve, reject) => {
             db.collection(collection, (err, c) => {
                 if (err) {
@@ -30,6 +49,7 @@ function collection(collection) {
 exports.collection = collection;
 function save(obj) {
     return __awaiter(this, void 0, void 0, function* () {
+        checkConnection();
         const col = yield collection(obj.collection);
         return new Promise((resolve, reject) => {
             const savingObj = _.pick(obj, obj.props);
@@ -45,11 +65,13 @@ function save(obj) {
 exports.save = save;
 function findOne(obj) {
     return __awaiter(this, void 0, void 0, function* () {
+        checkConnection();
         const col = yield collection(obj.collection);
         return new Promise((resolve, reject) => {
             const keyedObj = _.pick(obj, obj.keys);
             col.findOne(keyedObj, (err, res) => {
                 if (err) {
+                    console.log(`got error`);
                     return reject(err);
                 }
                 return resolve(res);

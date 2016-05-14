@@ -13,6 +13,7 @@
   "dependencies": {
     "bluebird": "^3.3.5",
     "dotenv": "^2.0.0",
+    "js-yaml": "^3.6.1",
     "lodash": "^4.11.2",
     "mongodb": "^2.1.18",
     "repeat-string": "^1.5.4",

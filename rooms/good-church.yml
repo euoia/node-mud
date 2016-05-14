@@ -1,0 +1,4 @@
+short: light octogonal room
+long: The church of good.
+exits:
+  east: evil-church

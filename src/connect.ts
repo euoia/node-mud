@@ -4,6 +4,7 @@ import Promise = require('bluebird');
 import db = require('./db');
 import Player = require('./Player');
 import Client = require('./client');
+import world = require('./world');
 
 const logoPath = './assets/logo.txt';
 
@@ -18,7 +19,7 @@ const existingPlayer = async (player: Player) => {
     return player.disconnect();
   }
 
-  player.tell(`Entering game...`);
+  world.enterWorld(player);
 };
 
 const newPlayer = async (player: Player) => {

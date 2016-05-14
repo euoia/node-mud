@@ -2,6 +2,7 @@
 import crypto = require('crypto');
 import Client = require('./client');
 import config = require('./config');
+import commands = require('./commands');
 
 export = class Player {
   collection: string;
@@ -10,11 +11,12 @@ export = class Player {
   salt: string; // password salt.
   password: string; // hashed password.
   alignment: string;
+  roomID: string;
 
   constructor (public name: string, public client: Client) {
     this.collection = 'players';
     this.keys = 'name';
-    this.props = ['name', 'salt', 'password', 'alignment'];
+    this.props = ['name', 'salt', 'password', 'alignment', 'roomID'];
     this.salt = crypto.randomBytes(64).toString('hex');
   }
 
@@ -43,8 +45,14 @@ export = class Player {
     this.client.write(text);
   }
 
-  prompt (input: string) {
+  async prompt (input: string) {
     return this.client.prompt(input);
+  }
+
+  async setInteractive () {
+    const command = await this.prompt(`$ `);
+    commands.handle(command, this);
+    this.setInteractive();
   }
 
   disconnect () {

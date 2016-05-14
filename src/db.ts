@@ -4,12 +4,27 @@ import config = require('./config');
 import Promise = require('bluebird');
 import _ = require('lodash');
 
-const server = new mongodb.Server(config.mongo.host, config.mongo.port);
-const db = new mongodb.Db('node-mud', server, { w: 1 });
+const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
+let db = null;
 
-db.open(function() {});
+const checkConnection = () => {
+  if (db === null) {
+    throw new Error('Not connected to database.');
+  }
+};
+
+export async function connect () {
+  return new Promise((resolve, reject) => {
+    mongodb.MongoClient.connect(url, (err, database) => {
+      if (err) { return reject(err); }
+      db = database;
+      return resolve(null);
+    });
+  });
+}
 
 export async function collection (collection: string) {
+  checkConnection();
   return new Promise<mongodb.Collection>((resolve, reject) => {
     db.collection(collection, (err, c) => {
       if (err) { return reject(err); }
@@ -19,6 +34,7 @@ export async function collection (collection: string) {
 }
 
 export async function save(obj: Persistable) {
+  checkConnection();
   const col = await collection(obj.collection);
 
   return new Promise((resolve, reject) => {
@@ -32,13 +48,14 @@ export async function save(obj: Persistable) {
 }
 
 export async function findOne(obj: Persistable) {
+  checkConnection();
   const col = await collection(obj.collection);
 
   return new Promise((resolve, reject) => {
     const keyedObj = _.pick(obj, obj.keys);
 
     col.findOne(keyedObj, (err, res) => {
-      if (err) { return reject(err); }
+      if (err) { console.log(`got error`); return reject(err); }
       return resolve(res);
     });
   });

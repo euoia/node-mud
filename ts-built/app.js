@@ -12,7 +12,7 @@ const client_1 = require("./client");
 const config = require("./config");
 const log = require("./log");
 const net = require("net");
-const connect = require("./connect");
+const connect_1 = require("./connect");
 const db = require("./db");
 const world = require("./world");
 const commands = require("./commands");
@@ -22,13 +22,13 @@ const main = function () {
         yield Bluebird.all([db.connect(), world.load(), commands.load()]);
         const server = net.createServer((connection) => {
             log.info(`client connected`);
-            const client = new client_1.Client(connection);
+            const client = new client_1.default(connection);
             connection.setEncoding('utf8');
             connection.on('end', () => {
                 log.info(`client disconnected`);
             });
             try {
-                connect(client);
+                connect_1.default(client);
             }
             catch (e) {
                 log.error(e.message);

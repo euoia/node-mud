@@ -46,13 +46,24 @@ const updatePlayerRoom = (player) => {
     }
     return rooms.get(player.roomID);
 };
-function enterWorld(player) {
-    player.tell(`Entering game...`);
-    updatePlayerRoom(player);
-    enterRoom(player);
-    player.setInteractive();
+function gameLoop(player) {
+    return __awaiter(this, void 0, void 0, function* () {
+        player.tell(`Entering game...`);
+        updatePlayerRoom(player);
+        enterRoom(player);
+        while (player.hasQuit === false) {
+            try {
+                yield player.setInteractive();
+            }
+            catch (e) {
+                console.log('error in game loop');
+                console.error(e);
+            }
+        }
+        player.disconnect();
+    });
 }
-exports.enterWorld = enterWorld;
+exports.gameLoop = gameLoop;
 ;
 function enterRoom(player) {
     look(player);

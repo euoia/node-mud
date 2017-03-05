@@ -13,19 +13,27 @@ const config = require("./config");
 const commands = require("./commands");
 const alias_1 = require("./alias");
 const _ = require("lodash");
+const db = require("./db");
 class Player {
     constructor(name, client) {
         this.name = name;
         this.client = client;
         this.collection = 'players';
         this.keys = 'name';
-        this.props = ['name', 'salt', 'password', 'alignment', 'roomID'];
+        this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases'];
         this.salt = crypto.randomBytes(64).toString('hex');
         this.aliases = [];
+        this.hasQuit = false;
     }
     // Load from a mongodb document.
     load(doc) {
-        this.props.forEach(prop => this[prop] = doc[prop]);
+        this.props.forEach(prop => {
+            // Filter out properties that weren't saved. This allows us to add new
+            // properties.
+            if (doc[prop] !== undefined) {
+                this[prop] = doc[prop];
+            }
+        });
     }
     setPassword(password) {
         this.password = crypto
@@ -46,6 +54,14 @@ class Player {
     tell(text) {
         this.client.write(text);
     }
+    quit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.client.write(`Saving...`);
+            yield this.save();
+            yield this.client.write(`Saved. Goodbye!`);
+            this.hasQuit = true;
+        });
+    }
     prompt(input) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.client.prompt(input);
@@ -56,16 +72,14 @@ class Player {
             const input = yield this.prompt(`$ `);
             console.log(`got input ${input}`);
             const substitutedInput = this.substituteAlias(input);
-            commands.handle(substitutedInput, this);
-            // After getting a command, get another command.
-            this.setInteractive();
+            yield commands.handle(substitutedInput, this);
         });
     }
     disconnect() {
         return this.client.disconnect();
     }
     addAlias(alias, command) {
-        this.aliases.push(new alias_1.Alias(alias, command));
+        this.aliases.push(new alias_1.default(alias, command));
         this.tell(`Added alias: ${alias} => ${command} $*`);
     }
     listAliases() {
@@ -86,7 +100,12 @@ class Player {
         }
         return aliasMatch.command;
     }
+    save() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db.save(this);
+        });
+    }
 }
-exports.Player = Player;
+exports.default = Player;
 ;
 //# sourceMappingURL=player.js.map

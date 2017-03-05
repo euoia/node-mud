@@ -8,16 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const world = require("../world");
 function match(command) {
-    return command === 'look';
+    return command === 'quit';
 }
 exports.match = match;
 function handle(args, player, fail) {
     return __awaiter(this, void 0, void 0, function* () {
-        world.look(player);
+        yield player.quit();
         return true;
     });
 }
 exports.handle = handle;
-//# sourceMappingURL=look.js.map
+//# sourceMappingURL=quit.js.map

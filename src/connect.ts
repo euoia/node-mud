@@ -1,9 +1,10 @@
 import fs = require('fs');
 import Bluebird = require('bluebird');
-import db = require('./db');
-import { Player } from './player';
-import { Client } from './client';
-import world = require('./world');
+import * as db from './db';
+import Player from './player';
+import Client from './client';
+import * as world from  './world';
+import newPlayer from './new-player';
 
 const logoPath = './assets/logo.txt';
 
@@ -18,37 +19,10 @@ const existingPlayer = async (player: Player) => {
     return player.disconnect();
   }
 
-  world.enterWorld(player);
+  await world.gameLoop(player);
 };
 
-const newPlayer = async (player: Player) => {
-  player.tell(`A new player!`);
-
-  // Password.
-  const password = await player.prompt(`What is your password? `);
-  const passwordConfirm = await player.prompt(`What is your password (confirm)? `);
-
-  if (password !== passwordConfirm) {
-    player.tell(`Passwords did not match.`);
-    return player.disconnect();
-  }
-
-  player.setPassword(password);
-
-  // Alignment.
-  let alignment = await player.prompt(`What is your alignment, good or evil? `);
-  while (alignment !== 'good' && alignment !== 'evil') {
-    player.tell(`That's not a valid choice. Enter good or evil.`);
-    alignment = await player.prompt(`What is your alignment, good or evil? `);
-  }
-
-  player.alignment = alignment;
-  await db.save(player);
-
-  world.enterWorld(player);
-};
-
-export = async (client: Client) => {
+export default async function (client: Client): Promise<void> {
   client.write(await readLogo());
 
   const name = await client.prompt('What is your name? ');

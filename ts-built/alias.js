@@ -6,6 +6,6 @@ class Alias {
         this.command = command;
     }
 }
-exports.Alias = Alias;
+exports.default = Alias;
 ;
 //# sourceMappingURL=alias.js.map

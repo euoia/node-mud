@@ -1,8 +1,8 @@
-import { Client } from './client';
+import Client from './client';
 import config = require('./config');
 import log = require('./log');
 import net = require('net');
-import connect = require('./connect');
+import connect from './connect';
 import db = require('./db');
 import world = require('./world');
 import commands = require('./commands');

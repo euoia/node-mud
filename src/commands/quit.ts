@@ -1,11 +1,11 @@
 import Player from '../player';
-import world = require('../world');
 
 export function match(command: string) {
-  return command === 'look';
+  return command === 'quit';
 }
 
 export async function handle(args: string, player: Player, fail: Function) {
-  world.look(player);
+  await player.quit();
   return true;
 }
+

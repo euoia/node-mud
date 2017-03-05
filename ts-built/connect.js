@@ -7,11 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const Bluebird = require("bluebird");
 const db = require("./db");
 const player_1 = require("./player");
 const world = require("./world");
+const new_player_1 = require("./new-player");
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
     return new Bluebird(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
@@ -22,37 +24,21 @@ const existingPlayer = (player) => __awaiter(this, void 0, void 0, function* () 
         player.tell(`Incorrect password.`);
         return player.disconnect();
     }
-    world.enterWorld(player);
+    yield world.gameLoop(player);
 });
-const newPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
-    player.tell(`A new player!`);
-    // Password.
-    const password = yield player.prompt(`What is your password? `);
-    const passwordConfirm = yield player.prompt(`What is your password (confirm)? `);
-    if (password !== passwordConfirm) {
-        player.tell(`Passwords did not match.`);
-        return player.disconnect();
-    }
-    player.setPassword(password);
-    // Alignment.
-    let alignment = yield player.prompt(`What is your alignment, good or evil? `);
-    while (alignment !== 'good' && alignment !== 'evil') {
-        player.tell(`That's not a valid choice. Enter good or evil.`);
-        alignment = yield player.prompt(`What is your alignment, good or evil? `);
-    }
-    player.alignment = alignment;
-    yield db.save(player);
-    world.enterWorld(player);
-});
-module.exports = (client) => __awaiter(this, void 0, void 0, function* () {
-    client.write(yield readLogo());
-    const name = yield client.prompt('What is your name? ');
-    const player = new player_1.Player(name, client);
-    const playerDoc = yield db.findOne(player);
-    if (playerDoc === null) {
-        return newPlayer(player);
-    }
-    player.load(playerDoc);
-    return existingPlayer(player);
-});
+function default_1(client) {
+    return __awaiter(this, void 0, void 0, function* () {
+        client.write(yield readLogo());
+        const name = yield client.prompt('What is your name? ');
+        const player = new player_1.default(name, client);
+        const playerDoc = yield db.findOne(player);
+        if (playerDoc === null) {
+            return new_player_1.default(player);
+        }
+        player.load(playerDoc);
+        return existingPlayer(player);
+    });
+}
+exports.default = default_1;
+;
 //# sourceMappingURL=connect.js.map

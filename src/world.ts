@@ -2,7 +2,7 @@ import path = require('path');
 import fs = require('fs');
 import Bluebird = require('bluebird');
 import yaml = require('js-yaml');
-import { Player } from './player';
+import Player from './player';
 
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
@@ -43,11 +43,21 @@ const updatePlayerRoom = (player: Player) => {
   return rooms.get(player.roomID);
 };
 
-export function enterWorld (player: Player) {
+export async function gameLoop (player: Player) {
   player.tell(`Entering game...`);
   updatePlayerRoom(player);
   enterRoom(player);
-  player.setInteractive();
+
+  while (player.hasQuit === false) {
+    try {
+      await player.setInteractive();
+    } catch (e) {
+      console.log('error in game loop');
+      console.error(e);
+    }
+  }
+
+  player.disconnect();
 };
 
 export function enterRoom (player: Player) {

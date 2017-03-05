@@ -1,11 +1,10 @@
 import net = require('net');
-import Bluebird = require('bluebird');
 
-export class Client {
+export default class Client {
   constructor (public connection: net.Socket) {
   }
 
-  write (text) {
+  async write (text) {
     this.connection.write(text + '\n');
   }
 
@@ -19,6 +18,6 @@ export class Client {
   }
 
   disconnect () {
-    return this.connection.destroy();
+    return this.connection.end();
   }
 };

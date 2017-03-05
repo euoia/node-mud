@@ -32,24 +32,26 @@ function load() {
 }
 exports.load = load;
 function handle(command, player) {
-    console.log(`received command`, command, `from`, player.name);
-    let failMessage = `What?`;
-    const fail = function (failString) {
-        failMessage = failString;
-    };
-    // Try all commands.
-    for (let i = 0; i < commands.length; i += 1) {
-        if (commands[i].match(command)) {
-            if (commands[i].handle(command, player, fail)) {
-                return;
+    return __awaiter(this, void 0, void 0, function* () {
+        console.log(`received command`, command, `from`, player.name);
+        let failMessage = `What?`;
+        const fail = function (failString) {
+            failMessage = failString;
+        };
+        // Try all commands.
+        for (let i = 0; i < commands.length; i += 1) {
+            if (commands[i].match(command)) {
+                if (yield commands[i].handle(command, player, fail)) {
+                    return;
+                }
             }
         }
-    }
-    // Try the world.
-    if (world.handleCommand(command, player, fail)) {
-        return;
-    }
-    player.tell(failMessage);
+        // Try the world.
+        if (world.handleCommand(command, player, fail)) {
+            return;
+        }
+        player.tell(failMessage);
+    });
 }
 exports.handle = handle;
 //# sourceMappingURL=commands.js.map

@@ -52,9 +52,17 @@ function save(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         checkConnection();
         const col = yield collection(obj.collection);
+        // See if there's an existing object.
+        const existingObj = yield findOne(obj);
+        if (existingObj) {
+            // If so, use the ID from that object.
+            obj._id = existingObj._id;
+        }
         return new Bluebird((resolve, reject) => {
-            const savingObj = _.pick(obj, obj.props);
-            col.insert(savingObj, (err, res) => {
+            // Make sure to include _id (if present) so that the object is updated
+            // rather than saved.
+            const savingObj = _.pick(obj, [...obj.props, '_id']);
+            col.save(savingObj, (err, res) => {
                 if (err) {
                     return reject(err);
                 }

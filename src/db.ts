@@ -1,4 +1,4 @@
-///<reference path='Persistable.d.ts'/>
+///<reference path='../interfaces/Persistable.d.ts'/>
 import mongodb = require('mongodb');
 import config = require('./config');
 import Bluebird = require('bluebird');

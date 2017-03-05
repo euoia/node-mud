@@ -2,6 +2,7 @@ import path = require('path');
 import fs = require('fs');
 import Bluebird = require('bluebird');
 import yaml = require('js-yaml');
+import { Player } from './player';
 
 const roomsPath = 'rooms';
 const goodStart = 'good-church';

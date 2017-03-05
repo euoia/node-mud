@@ -1,4 +1,4 @@
-import Client = require('./client');
+import { Client } from './client';
 import config = require('./config');
 import log = require('./log');
 import net = require('net');

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const fs = require("fs");
 const Bluebird = require("bluebird");
 const db = require("./db");
-const Player = require("./Player");
+const player_1 = require("./player");
 const world = require("./world");
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
@@ -47,7 +47,7 @@ const newPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
 module.exports = (client) => __awaiter(this, void 0, void 0, function* () {
     client.write(yield readLogo());
     const name = yield client.prompt('What is your name? ');
-    const player = new Player(name, client);
+    const player = new player_1.Player(name, client);
     const playerDoc = yield db.findOne(player);
     if (playerDoc === null) {
         return newPlayer(player);

@@ -1,9 +1,8 @@
-'use strict';
 import fs = require('fs');
 import Bluebird = require('bluebird');
 import db = require('./db');
-import Player = require('./Player');
-import Client = require('./client');
+import { Player } from './player';
+import { Client } from './client';
 import world = require('./world');
 
 const logoPath = './assets/logo.txt';

@@ -1,12 +1,11 @@
-///<reference path='Player.d.ts'/>
 import crypto = require('crypto');
-import Client = require('./client');
+import { Client } from './client';
 import config = require('./config');
 import commands = require('./commands');
-import Alias = require('./alias');
+import { Alias } from './alias';
 import _ = require('lodash');
 
-export = class Player {
+export class Player {
   aliases: Alias[];
   collection: string;
   keys: string;
@@ -36,6 +35,9 @@ export = class Player {
         .digest('hex');
   }
 
+  /**
+   * @returns {bool}
+   */
   checkPassword (password: string) {
     const hashed = crypto
         .createHmac('sha1', this.salt + config.app.secret)
@@ -49,7 +51,7 @@ export = class Player {
     this.client.write(text);
   }
 
-  async prompt (input: string) {
+  async prompt (input: string): Promise<string> {
     return this.client.prompt(input);
   }
 

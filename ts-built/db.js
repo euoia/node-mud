@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-///<reference path='Persistable.d.ts'/>
+///<reference path='../interfaces/Persistable.d.ts'/>
 const mongodb = require("mongodb");
 const config = require("./config");
 const Bluebird = require("bluebird");

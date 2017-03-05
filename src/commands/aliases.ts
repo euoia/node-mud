@@ -1,4 +1,4 @@
-import Player = require('../player');
+import { Player } from '../player';
 
 export function match(command: string) {
   return command.split(' ')[0] === 'aliases';

@@ -1,7 +1,7 @@
 import fs = require('fs');
 import path = require('path');
 import Bluebird = require('bluebird');
-import Player = require('./player');
+import { Player } from './player';
 import world = require('./world');
 
 const commandsPath = path.join(__dirname, 'commands');

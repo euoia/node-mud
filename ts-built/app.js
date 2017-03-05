@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Client = require("./client");
+const client_1 = require("./client");
 const config = require("./config");
 const log = require("./log");
 const net = require("net");
@@ -22,7 +22,7 @@ const main = function () {
         yield Bluebird.all([db.connect(), world.load(), commands.load()]);
         const server = net.createServer((connection) => {
             log.info(`client connected`);
-            const client = new Client(connection);
+            const client = new client_1.Client(connection);
             connection.setEncoding('utf8');
             connection.on('end', () => {
                 log.info(`client disconnected`);

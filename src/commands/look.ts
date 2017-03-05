@@ -1,4 +1,4 @@
-import Player = require('../player');
+import { Player } from '../player';
 import world = require('../world');
 
 export function match(command: string) {

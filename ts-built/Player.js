@@ -7,13 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-///<reference path='Player.d.ts'/>
+Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = require("crypto");
 const config = require("./config");
 const commands = require("./commands");
-const Alias = require("./alias");
+const alias_1 = require("./alias");
 const _ = require("lodash");
-module.exports = class Player {
+class Player {
     constructor(name, client) {
         this.name = name;
         this.client = client;
@@ -33,6 +33,9 @@ module.exports = class Player {
             .update(password)
             .digest('hex');
     }
+    /**
+     * @returns {bool}
+     */
     checkPassword(password) {
         const hashed = crypto
             .createHmac('sha1', this.salt + config.app.secret)
@@ -62,7 +65,7 @@ module.exports = class Player {
         return this.client.disconnect();
     }
     addAlias(alias, command) {
-        this.aliases.push(new Alias(alias, command));
+        this.aliases.push(new alias_1.Alias(alias, command));
         this.tell(`Added alias: ${alias} => ${command} $*`);
     }
     listAliases() {
@@ -83,5 +86,7 @@ module.exports = class Player {
         }
         return aliasMatch.command;
     }
-};
-//# sourceMappingURL=Player.js.map
+}
+exports.Player = Player;
+;
+//# sourceMappingURL=player.js.map

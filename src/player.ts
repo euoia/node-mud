@@ -58,19 +58,32 @@ export default class Player {
   }
 
   tell (text: string) {
-    this.client.write(text);
+    this.client.write(`${text}\n`);
   }
 
   async quit () {
-    await this.client.write(`Saving...`);
+    await this.client.write(`Saving...\n`);
     await this.save();
-
-    await this.client.write(`Saved. Goodbye!`);
+    await this.client.write(`Saved. Goodbye!\n`);
     this.hasQuit = true;
   }
 
   async prompt (input: string): Promise<string> {
     return this.client.prompt(input);
+  }
+
+  async promptPassword (input: string): Promise<string> {
+    let junk;
+
+    await this.client.write(input);
+    await this.client.disableLocalEcho();
+    // For some reason enabling and disabling local echo puts junk in the pipe.
+    junk = await this.client.getInput() as string;
+    const password = await this.client.getInput() as string;
+    await this.client.enableLocalEcho();
+    junk = await this.client.getInput() as string;
+
+    return password;
   }
 
   async setInteractive () {

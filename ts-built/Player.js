@@ -52,19 +52,32 @@ class Player {
         return hashed === this.password;
     }
     tell(text) {
-        this.client.write(text);
+        this.client.write(`${text}\n`);
     }
     quit() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.client.write(`Saving...`);
+            yield this.client.write(`Saving...\n`);
             yield this.save();
-            yield this.client.write(`Saved. Goodbye!`);
+            yield this.client.write(`Saved. Goodbye!\n`);
             this.hasQuit = true;
         });
     }
     prompt(input) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.client.prompt(input);
+        });
+    }
+    promptPassword(input) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let junk;
+            yield this.client.write(input);
+            yield this.client.disableLocalEcho();
+            // For some reason enabling and disabling local echo puts junk in the pipe.
+            junk = (yield this.client.getInput());
+            const password = yield this.client.getInput();
+            yield this.client.enableLocalEcho();
+            junk = (yield this.client.getInput());
+            return password;
         });
     }
     setInteractive() {

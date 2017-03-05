@@ -19,7 +19,7 @@ const readLogo = () => __awaiter(this, void 0, void 0, function* () {
     return new Bluebird(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
 });
 const existingPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
-    const password = yield player.prompt('What is your password? ');
+    const password = yield player.promptPassword('What is your password? ');
     if (player.checkPassword(password) === false) {
         player.tell(`Incorrect password.`);
         return player.disconnect();

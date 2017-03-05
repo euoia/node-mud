@@ -13,7 +13,7 @@ const readLogo = async () => {
 };
 
 const existingPlayer = async (player: Player) => {
-  const password = await player.prompt('What is your password? ');
+  const password = await player.promptPassword('What is your password? ');
   if (player.checkPassword(password) === false) {
     player.tell(`Incorrect password.`);
     return player.disconnect();

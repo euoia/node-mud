@@ -1,6 +1,6 @@
 'use strict';
 import fs = require('fs');
-import Promise = require('bluebird');
+import Bluebird = require('bluebird');
 import db = require('./db');
 import Player = require('./Player');
 import Client = require('./client');
@@ -9,7 +9,7 @@ import world = require('./world');
 const logoPath = './assets/logo.txt';
 
 const readLogo = async () => {
-  return new Promise<string>(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
+  return new Bluebird<string>(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
 };
 
 const existingPlayer = async (player: Player) => {
@@ -45,7 +45,8 @@ const newPlayer = async (player: Player) => {
 
   player.alignment = alignment;
   await db.save(player);
-  player.tell(`Entering game...`);
+
+  world.enterWorld(player);
 };
 
 export = async (client: Client) => {

@@ -1,0 +1,9 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/typed-typings/npm-repeat-string/17eeaf882e9c0b3822653f74a028909d3fc0c97f/typings.json",
+    "raw": "registry:npm/repeat-string#1.0.0+20160211003958",
+    "main": "index.d.ts",
+    "name": "repeat-string"
+  }
+}

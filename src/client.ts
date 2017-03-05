@@ -1,6 +1,6 @@
 ///<reference path='Client.d.ts'/>
 import net = require('net');
-import Promise = require('bluebird');
+import Bluebird = require('bluebird');
 
 export = class Client {
   constructor (public connection: net.Socket) {
@@ -11,7 +11,7 @@ export = class Client {
   }
 
   prompt (input) {
-    return new Promise(resolve => {
+    return new Bluebird(resolve => {
       this.connection.write(input);
       this.connection.once('data', function (response) {
         resolve(response.replace(/[\n\r]/g, ''));

@@ -6,10 +6,10 @@ import connect = require('./connect');
 import db = require('./db');
 import world = require('./world');
 import commands = require('./commands');
-import Promise = require('bluebird');
+import Bluebird = require('bluebird');
 
 const main = async function () {
-  await Promise.all([db.connect(), world.load(), commands.load()]);
+  await Bluebird.all([db.connect(), world.load(), commands.load()]);
 
   const server = net.createServer((connection: net.Socket) => {
     log.info(`client connected`);

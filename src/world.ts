@@ -1,6 +1,6 @@
 import path = require('path');
 import fs = require('fs');
-import Promise = require('bluebird');
+import Bluebird = require('bluebird');
 import yaml = require('js-yaml');
 
 const roomsPath = 'rooms';
@@ -8,14 +8,17 @@ const goodStart = 'good-church';
 const evilStart = 'evil-church';
 const rooms = new Map();
 
+const exitDirections = ['north', 'south', 'east', 'west', 'northeast',
+  'southeast', 'southwest', 'northwest'];
+
 export async function load () {
-  const readFileAsync = Promise.promisify(fs.readFile);
-  const readdirAsync = Promise.promisify(fs.readdir);
+  const readFileAsync = Bluebird.promisify(fs.readFile);
+  const readdirAsync = Bluebird.promisify(fs.readdir);
 
-  const files = await readdirAsync(roomsPath).map(f => path.join(roomsPath, f));
+  const files = await readdirAsync(roomsPath).map(f => path.join(roomsPath, f as any));
 
-  const roomArr = await Promise.map(files, async function (f) {
-    const roomData = await readFileAsync(f).then(data => yaml.safeLoad(data.toString()));
+  const roomArr = await Bluebird.map(files, async function (f) {
+    const roomData = await readFileAsync(f as any).then(data => yaml.safeLoad(data.toString()));
     roomData.roomID = path.parse(f).name;
     return roomData;
   });
@@ -68,12 +71,16 @@ export function look (player: Player) {
   player.tell(`There ${isAre} ${numExits} obvious ${exitExits}${exitsStr}`);
 }
 
-export function handleCommand (command: string, player: Player) {
+export function handleCommand (command: string, player: Player, fail: Function): boolean {
   const room = rooms.get(player.roomID);
   if (room.exits[command]) {
     console.log(`moving ${player.name} to ${room.exits[command]}`);
     movePlayer(player, room.exits[command]);
     return true;
+  }
+
+  if (exitDirections.indexOf(command) >= 0) {
+    fail(`You can't go that way!`);
   }
 
   return false;

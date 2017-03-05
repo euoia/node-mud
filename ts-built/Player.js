@@ -2,15 +2,17 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 ///<reference path='Player.d.ts'/>
-const crypto = require('crypto');
-const config = require('./config');
-const commands = require('./commands');
+const crypto = require("crypto");
+const config = require("./config");
+const commands = require("./commands");
+const Alias = require("./alias");
+const _ = require("lodash");
 module.exports = class Player {
     constructor(name, client) {
         this.name = name;
@@ -19,6 +21,7 @@ module.exports = class Player {
         this.keys = 'name';
         this.props = ['name', 'salt', 'password', 'alignment', 'roomID'];
         this.salt = crypto.randomBytes(64).toString('hex');
+        this.aliases = [];
     }
     // Load from a mongodb document.
     load(doc) {
@@ -47,14 +50,38 @@ module.exports = class Player {
     }
     setInteractive() {
         return __awaiter(this, void 0, void 0, function* () {
-            const command = yield this.prompt(`$ `);
-            commands.handle(command, this);
+            const input = yield this.prompt(`$ `);
+            console.log(`got input ${input}`);
+            const substitutedInput = this.substituteAlias(input);
+            commands.handle(substitutedInput, this);
+            // After getting a command, get another command.
             this.setInteractive();
         });
     }
     disconnect() {
         return this.client.disconnect();
     }
-}
-;
+    addAlias(alias, command) {
+        this.aliases.push(new Alias(alias, command));
+        this.tell(`Added alias: ${alias} => ${command} $*`);
+    }
+    listAliases() {
+        this.aliases.forEach(a => {
+            this.tell(`${a.alias} => ${a.command} $*`);
+        });
+    }
+    substituteAlias(input) {
+        const words = input.split(' ');
+        const alias = words[0];
+        const aliasMatch = _.find(this.aliases, { alias });
+        if (aliasMatch === undefined) {
+            return input;
+        }
+        if (words.length > 1) {
+            const rest = words.splice(1).join(' ');
+            return `${aliasMatch.command} ${rest}`;
+        }
+        return aliasMatch.command;
+    }
+};
 //# sourceMappingURL=Player.js.map

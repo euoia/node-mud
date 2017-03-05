@@ -2,16 +2,17 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='Persistable.d.ts'/>
-const mongodb = require('mongodb');
-const config = require('./config');
-const Promise = require('bluebird');
-const _ = require('lodash');
+const mongodb = require("mongodb");
+const config = require("./config");
+const Bluebird = require("bluebird");
+const _ = require("lodash");
 const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
 let db = null;
 const checkConnection = () => {
@@ -21,7 +22,7 @@ const checkConnection = () => {
 };
 function connect() {
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => {
+        return new Bluebird((resolve, reject) => {
             mongodb.MongoClient.connect(url, (err, database) => {
                 if (err) {
                     return reject(err);
@@ -36,7 +37,7 @@ exports.connect = connect;
 function collection(collection) {
     return __awaiter(this, void 0, void 0, function* () {
         checkConnection();
-        return new Promise((resolve, reject) => {
+        return new Bluebird((resolve, reject) => {
             db.collection(collection, (err, c) => {
                 if (err) {
                     return reject(err);
@@ -51,7 +52,7 @@ function save(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         checkConnection();
         const col = yield collection(obj.collection);
-        return new Promise((resolve, reject) => {
+        return new Bluebird((resolve, reject) => {
             const savingObj = _.pick(obj, obj.props);
             col.insert(savingObj, (err, res) => {
                 if (err) {
@@ -67,7 +68,7 @@ function findOne(obj) {
     return __awaiter(this, void 0, void 0, function* () {
         checkConnection();
         const col = yield collection(obj.collection);
-        return new Promise((resolve, reject) => {
+        return new Bluebird((resolve, reject) => {
             const keyedObj = _.pick(obj, obj.keys);
             col.findOne(keyedObj, (err, res) => {
                 if (err) {

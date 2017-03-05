@@ -8,7 +8,9 @@
   "ambientDependencies": {
     "dotenv": "registry:dt/dotenv#2.0.0+20160327131627",
     "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
-    "node": "registry:dt/node#4.0.0+20160505172921",
     "winston": "registry:dt/winston#0.0.0+20160417152829"
+  },
+  "globalDependencies": {
+    "node": "registry:env/node#6.0.0+20170213133316"
   }
 }

@@ -2,25 +2,28 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator.throw(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
         function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const path = require('path');
-const fs = require('fs');
-const Promise = require('bluebird');
-const yaml = require('js-yaml');
+Object.defineProperty(exports, "__esModule", { value: true });
+const path = require("path");
+const fs = require("fs");
+const Bluebird = require("bluebird");
+const yaml = require("js-yaml");
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';
 const rooms = new Map();
+const exitDirections = ['north', 'south', 'east', 'west', 'northeast',
+    'southeast', 'southwest', 'northwest'];
 function load() {
     return __awaiter(this, void 0, void 0, function* () {
-        const readFileAsync = Promise.promisify(fs.readFile);
-        const readdirAsync = Promise.promisify(fs.readdir);
+        const readFileAsync = Bluebird.promisify(fs.readFile);
+        const readdirAsync = Bluebird.promisify(fs.readdir);
         const files = yield readdirAsync(roomsPath).map(f => path.join(roomsPath, f));
-        const roomArr = yield Promise.map(files, function (f) {
+        const roomArr = yield Bluebird.map(files, function (f) {
             return __awaiter(this, void 0, void 0, function* () {
                 const roomData = yield readFileAsync(f).then(data => yaml.safeLoad(data.toString()));
                 roomData.roomID = path.parse(f).name;
@@ -72,12 +75,15 @@ function look(player) {
     player.tell(`There ${isAre} ${numExits} obvious ${exitExits}${exitsStr}`);
 }
 exports.look = look;
-function handleCommand(command, player) {
+function handleCommand(command, player, fail) {
     const room = rooms.get(player.roomID);
     if (room.exits[command]) {
         console.log(`moving ${player.name} to ${room.exits[command]}`);
         movePlayer(player, room.exits[command]);
         return true;
+    }
+    if (exitDirections.indexOf(command) >= 0) {
+        fail(`You can't go that way!`);
     }
     return false;
 }

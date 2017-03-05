@@ -1,7 +1,7 @@
 "use strict";
-const config = require('./config');
-const winston = require('winston');
-const repeat = require('repeat-string');
+const config = require("./config");
+const winston = require("winston");
+const repeat = require("repeat-string");
 function zeroPad(num, len) {
     return (repeat('0', len) + num.toString()).slice(0 - len);
 }

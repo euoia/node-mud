@@ -15,4 +15,6 @@ interface Player {
   prompt (input: string);
   disconnect ();
   setInteractive ();
+  addAlias (alias: string, command: string);
+  listAliases ();
 }

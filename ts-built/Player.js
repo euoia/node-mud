@@ -114,6 +114,12 @@ class Player {
             yield db.save(this);
         });
     }
+    getProperName() {
+        return `${this.name[0].toLocaleUpperCase()}${this.name.slice(1)}`;
+    }
+    getShort(player) {
+        return `${this.getProperName()} [${this.alignment}]`;
+    }
 }
 exports.default = Player;
 ;

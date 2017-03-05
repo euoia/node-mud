@@ -122,4 +122,12 @@ export default class Player {
   async save () {
     await db.save(this);
   }
+
+  getProperName () {
+    return `${this.name[0].toLocaleUpperCase()}${this.name.slice(1)}`;
+  }
+
+  getShort(player: Player) {
+    return `${this.getProperName()} [${this.alignment}]`;
+  }
 };

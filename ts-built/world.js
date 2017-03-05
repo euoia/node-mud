@@ -12,6 +12,8 @@ const path = require("path");
 const fs = require("fs");
 const Bluebird = require("bluebird");
 const yaml = require("js-yaml");
+const room_1 = require("./room");
+const _ = require("lodash");
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';
@@ -30,7 +32,7 @@ function load() {
                 return roomData;
             });
         });
-        roomArr.forEach(r => rooms.set(r.roomID, r));
+        roomArr.forEach(r => rooms.set(r.roomID, new room_1.default(r)));
     });
 }
 exports.load = load;
@@ -44,13 +46,18 @@ const updatePlayerRoom = (player) => {
     if (rooms.has(player.roomID) === false) {
         throw new Error(`Room not found: ${player.roomID}`);
     }
-    return rooms.get(player.roomID);
+    enterRoom(player, player.roomID);
 };
 function gameLoop(player) {
     return __awaiter(this, void 0, void 0, function* () {
+        try {
+            updatePlayerRoom(player);
+        }
+        catch (e) {
+            console.log(`Error entering the world.`);
+            console.log(e);
+        }
         player.tell(`Entering game...`);
-        updatePlayerRoom(player);
-        enterRoom(player);
         while (player.hasQuit === false) {
             try {
                 yield player.setInteractive();
@@ -65,25 +72,35 @@ function gameLoop(player) {
 }
 exports.gameLoop = gameLoop;
 ;
-function enterRoom(player) {
+function leaveRoom(player) {
+    _.pull(rooms.get(player.roomID).inventory, player);
+    player.roomID = null;
+}
+function enterRoom(player, roomID) {
+    player.roomID = roomID;
+    rooms.get(roomID).inventory.push(player);
     look(player);
 }
-exports.enterRoom = enterRoom;
-function movePlayer(player, roomID) {
-    player.roomID = roomID;
-    enterRoom(player);
+function movePlayer(player, newRoomID) {
+    leaveRoom(player);
+    enterRoom(player, newRoomID);
 }
 exports.movePlayer = movePlayer;
 function look(player) {
     const room = rooms.get(player.roomID);
     player.tell(room.short);
     player.tell(room.long);
+    // Exits.
     const exits = room.exits !== undefined ? room.exits : {};
     const numExits = Object.keys(exits).length;
     const isAre = numExits === 1 ? `is` : `are`;
     const exitExits = numExits === 1 ? `exit` : `exits`;
     const exitsStr = numExits > 0 ? `: ${Object.keys(exits).join(', ')}.` : '';
     player.tell(`There ${isAre} ${numExits} obvious ${exitExits}${exitsStr}`);
+    // Inventory.
+    room.inventory
+        .filter(i => i !== player)
+        .forEach(i => player.tell(i.getShort(player)));
 }
 exports.look = look;
 function handleCommand(command, player, fail) {

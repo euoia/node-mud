@@ -1,0 +1,4 @@
+short: marketplace
+long: A bustling marketplace with citizens milling around.
+exits:
+  north: good-church

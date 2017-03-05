@@ -3,6 +3,8 @@ import fs = require('fs');
 import Bluebird = require('bluebird');
 import yaml = require('js-yaml');
 import Player from './player';
+import Room from './room';
+import * as _ from 'lodash';
 
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
@@ -24,7 +26,7 @@ export async function load () {
     return roomData;
   });
 
-  roomArr.forEach(r => rooms.set(r.roomID, r));
+  roomArr.forEach(r => rooms.set(r.roomID, new Room(r)));
 }
 
 const getPlayerStartingRoom = (player: Player) => {
@@ -40,13 +42,18 @@ const updatePlayerRoom = (player: Player) => {
     throw new Error(`Room not found: ${player.roomID}`);
   }
 
-  return rooms.get(player.roomID);
+  enterRoom(player, player.roomID);
 };
 
 export async function gameLoop (player: Player) {
+  try {
+    updatePlayerRoom(player);
+  } catch (e) {
+    console.log(`Error entering the world.`);
+    console.log(e);
+  }
+
   player.tell(`Entering game...`);
-  updatePlayerRoom(player);
-  enterRoom(player);
 
   while (player.hasQuit === false) {
     try {
@@ -60,13 +67,20 @@ export async function gameLoop (player: Player) {
   player.disconnect();
 };
 
-export function enterRoom (player: Player) {
+function leaveRoom (player: Player) {
+  _.pull(rooms.get(player.roomID).inventory, player);
+  player.roomID = null;
+}
+
+function enterRoom (player: Player, roomID: string) {
+  player.roomID = roomID;
+  rooms.get(roomID).inventory.push(player);
   look(player);
 }
 
-export function movePlayer (player: Player, roomID: string) {
-  player.roomID = roomID;
-  enterRoom(player);
+export function movePlayer (player: Player, newRoomID: string) {
+  leaveRoom(player);
+  enterRoom(player, newRoomID);
 }
 
 export function look (player: Player) {
@@ -74,12 +88,18 @@ export function look (player: Player) {
   player.tell(room.short);
   player.tell(room.long);
 
+  // Exits.
   const exits = room.exits !== undefined ? room.exits : {};
   const numExits = Object.keys(exits).length;
   const isAre = numExits === 1 ? `is` : `are`;
   const exitExits = numExits === 1 ? `exit` : `exits`;
   const exitsStr = numExits > 0 ? `: ${Object.keys(exits).join(', ')}.` : '';
   player.tell(`There ${isAre} ${numExits} obvious ${exitExits}${exitsStr}`);
+
+  // Inventory.
+  room.inventory
+    .filter(i => i !== player)
+    .forEach(i => player.tell(i.getShort(player)));
 }
 
 export function handleCommand (command: string, player: Player, fail: Function): boolean {

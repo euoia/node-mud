@@ -2,3 +2,4 @@ short: dark octogonal room
 long: The church of evil.
 exits:
   west: good-church
+  south: evil-marketplace

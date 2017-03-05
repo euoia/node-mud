@@ -1,0 +1,1 @@
+{"version":3,"file":"aliases.js","sourceRoot":"","sources":["../../src/commands/aliases.ts"],"names":[],"mappings":";;AAEA,eAAsB,OAAe;IACnC,MAAM,CAAC,OAAO,CAAC,KAAK,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC,KAAK,SAAS,CAAC;AAC7C,CAAC;AAFD,sBAEC;AAED,gBAAuB,IAAY,EAAE,MAAc,EAAE,IAAc;IACjE,MAAM,CAAC,WAAW,EAAE,CAAC;IACrB,MAAM,CAAC,IAAI,CAAC;AACd,CAAC;AAHD,wBAGC"}

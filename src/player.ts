@@ -73,15 +73,10 @@ export default class Player {
   }
 
   async promptPassword (input: string): Promise<string> {
-    let junk;
-
     await this.client.write(input);
     await this.client.disableLocalEcho();
-    // For some reason enabling and disabling local echo puts junk in the pipe.
-    junk = await this.client.getInput() as string;
     const password = await this.client.getInput() as string;
     await this.client.enableLocalEcho();
-    junk = await this.client.getInput() as string;
 
     return password;
   }

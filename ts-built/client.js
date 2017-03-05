@@ -21,11 +21,9 @@ class Client {
     }
     getInput() {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log('getting input');
             return new Promise(resolve => {
                 this.connection.once('data', response => {
                     const responseStr = response.toString();
-                    console.log('received data', responseStr);
                     resolve(responseStr.replace(/[\n\r]/g, ''));
                 });
             });
@@ -39,22 +37,25 @@ class Client {
     }
     disableLocalEcho() {
         return __awaiter(this, void 0, void 0, function* () {
-            // const m = [0x74, 0x65, 0x73, 0x74]; // test
-            // const m = [0xFF, 0xFC, 0x01]; // IAC WONT ECHO
             const m = [0xFF, 0xFB, 0x01]; // IAC WILL ECHO
             const message = new Buffer(m);
             return new Promise(resolve => {
-                this.connection.write(message, null, resolve);
+                this.connection.write(message, null, () => {
+                    // For some reason enabling and disabling local echo puts junk in the pipe.
+                    this.getInput().then(resolve);
+                });
             });
         });
     }
     enableLocalEcho() {
         return __awaiter(this, void 0, void 0, function* () {
             const m = [0xFF, 0xFC, 0x01]; // IAC WONT ECHO
-            // const m = [0xFF, 0xFB, 0x01]; // IAC WILL ECHO
             const message = new Buffer(m);
             return new Promise(resolve => {
-                this.connection.write(message, null, resolve);
+                this.connection.write(message, null, () => {
+                    // For some reason enabling and disabling local echo puts junk in the pipe.
+                    this.getInput().then(resolve);
+                });
             });
         });
     }

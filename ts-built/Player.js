@@ -69,14 +69,10 @@ class Player {
     }
     promptPassword(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            let junk;
             yield this.client.write(input);
             yield this.client.disableLocalEcho();
-            // For some reason enabling and disabling local echo puts junk in the pipe.
-            junk = (yield this.client.getInput());
             const password = yield this.client.getInput();
             yield this.client.enableLocalEcho();
-            junk = (yield this.client.getInput());
             return password;
         });
     }

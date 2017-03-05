@@ -11,16 +11,16 @@ const commands = [];
 export async function load () {
   const readdirAsync = Bluebird.promisify(fs.readdir);
 
-  const files = await readdirAsync(commandsPath).map(f => path.join(commandsPath, f as any));
+  const files = await readdirAsync(commandsPath);
 
-  await Bluebird.map(files, async function (f) {
+  await Bluebird.map(files as string[], async f => {
     if (f.match(/.js$/) === null) {
       // Do not require .map files.
       return;
     }
 
-    console.log(`requiring`, f);
-    commands.push(require(f));
+    commands.push(require(path.join(commandsPath, f)));
+    console.log(`Loaded command: ${f.replace(/.js$/, '')}.`);
   });
 }
 
@@ -28,7 +28,7 @@ export async function handle(command: string, player: Player) {
   console.log(`received command`, command, `from`, player.name);
 
   let failMessage = `What?`;
-  const fail = function (failString) {
+  const fail = failString => {
     failMessage = failString;
   };
 

@@ -17,17 +17,15 @@ const commands = [];
 function load() {
     return __awaiter(this, void 0, void 0, function* () {
         const readdirAsync = Bluebird.promisify(fs.readdir);
-        const files = yield readdirAsync(commandsPath).map(f => path.join(commandsPath, f));
-        yield Bluebird.map(files, function (f) {
-            return __awaiter(this, void 0, void 0, function* () {
-                if (f.match(/.js$/) === null) {
-                    // Do not require .map files.
-                    return;
-                }
-                console.log(`requiring`, f);
-                commands.push(require(f));
-            });
-        });
+        const files = yield readdirAsync(commandsPath);
+        yield Bluebird.map(files, (f) => __awaiter(this, void 0, void 0, function* () {
+            if (f.match(/.js$/) === null) {
+                // Do not require .map files.
+                return;
+            }
+            commands.push(require(path.join(commandsPath, f)));
+            console.log(`Loaded command: `, f.replace(/.js$/, ''));
+        }));
     });
 }
 exports.load = load;
@@ -35,7 +33,7 @@ function handle(command, player) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(`received command`, command, `from`, player.name);
         let failMessage = `What?`;
-        const fail = function (failString) {
+        const fail = failString => {
             failMessage = failString;
         };
         // Try all commands.

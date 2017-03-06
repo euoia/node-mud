@@ -16,6 +16,7 @@
     "js-yaml": "^3.6.1",
     "lodash": "^4.11.2",
     "mongodb": "^2.1.18",
+    "pluralize": "^4.0.0",
     "repeat-string": "^1.5.4",
     "telnet": "0.0.1"
   },

@@ -20,7 +20,7 @@ function handle(args, player, fail) {
             return true;
         }
         const message = words.splice(1).join(' ');
-        player.getRoom().tell(`${player.getProperName()} says: ${message}`);
+        player.getRoom().tell(`%tp% |say|: ${message}`, player);
         return true;
     });
 }

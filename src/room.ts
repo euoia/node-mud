@@ -1,3 +1,5 @@
+import * as pluralize from 'pluralize';
+
 export default class Room {
   _id: string;
   short: string;
@@ -15,7 +17,29 @@ export default class Room {
     }
   }
 
-  tell (message) {
-    this.inventory.forEach(i => i.tell(message));
+  tell (message, thisPlayer = null) {
+    this.inventory.forEach(i => {
+      if (i === thisPlayer) {
+        let subjectiveMessage = message;
+        subjectiveMessage = message.replace('%tp%', 'You');
+        subjectiveMessage = subjectiveMessage.replace(
+          /(\|?)(\w+)(\|)/g,
+          match => {
+            return match.replace(/\|/g, '');
+          },
+        );
+        i.tell(subjectiveMessage.replace('%tp%', 'You'));
+      } else {
+        let subjectiveMessage = message;
+        subjectiveMessage = subjectiveMessage.replace(
+          /(\|?)(\w+)(\|)/g,
+          match => {
+            const word = match.replace(/\|/g, '');
+            return pluralize.plural(word);
+          },
+        );
+        i.tell(subjectiveMessage.replace('%tp%', thisPlayer.getProperName()));
+      }
+    });
   }
 };

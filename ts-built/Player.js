@@ -21,10 +21,11 @@ class Player {
         this.client = client;
         this.collection = 'players';
         this.keys = 'name';
-        this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases'];
+        this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases', 'replyName'];
         this.salt = crypto.randomBytes(64).toString('hex');
         this.aliases = [];
         this.hasQuit = false;
+        this.replyName = null;
     }
     // Load from a mongodb document.
     load(doc) {
@@ -82,7 +83,7 @@ class Player {
             const input = yield this.prompt(`$ `);
             console.log(`got input ${input}`);
             const substitutedInput = this.substituteAlias(input);
-            yield commands.handle(substitutedInput, this);
+            yield this.command(substitutedInput);
         });
     }
     disconnect() {
@@ -123,6 +124,11 @@ class Player {
     }
     getRoom() {
         return world.getRoomByID(this.roomID);
+    }
+    command(command) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield commands.handle(command, this);
+        });
     }
 }
 exports.default = Player;

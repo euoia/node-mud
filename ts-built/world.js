@@ -18,6 +18,7 @@ const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';
 const rooms = new Map();
+const players = [];
 const exitDirections = ['north', 'south', 'east', 'west', 'northeast',
     'southeast', 'southwest', 'northwest'];
 function load() {
@@ -120,4 +121,16 @@ function getRoomByID(roomID) {
     return rooms.get(roomID);
 }
 exports.getRoomByID = getRoomByID;
+function addPlayer(player) {
+    players.push(player);
+}
+exports.addPlayer = addPlayer;
+function removePlayer(player) {
+    _.pull(players, player);
+}
+exports.removePlayer = removePlayer;
+function getPlayerByName(playerName) {
+    return _.find(players, { name: playerName });
+}
+exports.getPlayerByName = getPlayerByName;
 //# sourceMappingURL=world.js.map

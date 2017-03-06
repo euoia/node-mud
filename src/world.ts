@@ -10,6 +10,7 @@ const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';
 const rooms = new Map();
+const players = [];
 
 const exitDirections = ['north', 'south', 'east', 'west', 'northeast',
   'southeast', 'southwest', 'northwest'];
@@ -119,4 +120,16 @@ export function handleCommand (command: string, player: Player, fail: Function):
 
 export function getRoomByID(roomID: string): Room {
   return rooms.get(roomID);
+}
+
+export function addPlayer(player: Player) {
+  players.push(player);
+}
+
+export function removePlayer(player: Player) {
+  _.pull(players, player);
+}
+
+export function getPlayerByName(playerName: string): Player {
+  return _.find(players, {name: playerName});
 }

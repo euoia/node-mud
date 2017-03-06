@@ -19,14 +19,16 @@ export default class Player {
   alignment: string;
   roomID: string;
   hasQuit: boolean;
+  replyName: string;
 
   constructor (public name: string, public client: Client) {
     this.collection = 'players';
     this.keys = 'name';
-    this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases'];
+    this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases', 'replyName'];
     this.salt = crypto.randomBytes(64).toString('hex');
     this.aliases = [];
     this.hasQuit = false;
+    this.replyName = null;
   }
 
   // Load from a mongodb document.
@@ -87,7 +89,7 @@ export default class Player {
     const input = await this.prompt(`$ `);
     console.log(`got input ${input}`);
     const substitutedInput = this.substituteAlias(input);
-    await commands.handle(substitutedInput, this);
+    await this.command(substitutedInput);
   }
 
   disconnect () {
@@ -135,5 +137,9 @@ export default class Player {
 
   getRoom(): Room {
     return world.getRoomByID(this.roomID);
+  }
+
+  async command(command) {
+    await commands.handle(command, this);
   }
 };

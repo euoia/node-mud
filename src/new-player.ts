@@ -1,5 +1,4 @@
 import Player from './player';
-import * as world from  './world';
 
 export default async function (player: Player): Promise<void> {
   player.tell(`A new player!`);
@@ -24,6 +23,4 @@ export default async function (player: Player): Promise<void> {
 
   player.alignment = alignment;
   await player.save();
-
-  await world.gameLoop(player);
 };

@@ -1,0 +1,1 @@
+{"version":3,"file":"look.js","sourceRoot":"","sources":["../../../src/commands/look.ts"],"names":[],"mappings":";;;;;;;;;;AACA,kCAAmC;AAEnC,eAAsB,OAAe;IACnC,MAAM,CAAC,OAAO,KAAK,MAAM,CAAC;AAC5B,CAAC;AAFD,sBAEC;AAED,gBAA6B,IAAY,EAAE,MAAc,EAAE,IAAc;;QACvE,KAAK,CAAC,IAAI,CAAC,MAAM,CAAC,CAAC;QACnB,MAAM,CAAC,IAAI,CAAC;IACd,CAAC;CAAA;AAHD,wBAGC"}

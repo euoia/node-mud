@@ -2,7 +2,7 @@ export default class Room {
   _id: string;
   short: string;
   long: string;
-  inventory: object[];
+  inventory: any[];
   exits: object[];
 
   constructor (roomData) {
@@ -13,5 +13,9 @@ export default class Room {
         this[prop] = roomData[prop];
       }
     }
+  }
+
+  tell (message) {
+    this.inventory.forEach(i => i.tell(message));
   }
 };

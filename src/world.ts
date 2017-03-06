@@ -116,3 +116,7 @@ export function handleCommand (command: string, player: Player, fail: Function):
 
   return false;
 }
+
+export function getRoomByID(roomID: string): Room {
+  return rooms.get(roomID);
+}

@@ -1,3 +1,4 @@
+///<reference path='../interfaces/Tellable.d.ts'/>
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Room {

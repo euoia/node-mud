@@ -5,6 +5,8 @@ import commands = require('./commands');
 import Alias from './alias';
 import _ = require('lodash');
 import * as db from './db';
+import * as world from './world';
+import Room from './room';
 
 export default class Player {
   _id: string;
@@ -129,5 +131,9 @@ export default class Player {
 
   getShort(player: Player) {
     return `${this.getProperName()} [${this.alignment}]`;
+  }
+
+  getRoom(): Room {
+    return world.getRoomByID(this.roomID);
   }
 };

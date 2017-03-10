@@ -4,8 +4,8 @@ export default async function (player: Player): Promise<void> {
   player.tell(`A new player!`);
 
   // Password.
-  const password = await player.prompt(`What is your password? `);
-  const passwordConfirm = await player.prompt(`What is your password (confirm)? `);
+  const password = await player.promptPassword(`What is your password? `);
+  const passwordConfirm = await player.promptPassword(`What is your password (confirm)? `);
 
   if (password !== passwordConfirm) {
     player.tell(`Passwords did not match.`);

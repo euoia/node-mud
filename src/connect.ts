@@ -28,7 +28,7 @@ export default async function (client: Client) {
   const player = new Player(name, client);
   const playerDoc = await db.findOne(player);
   if (playerDoc === null) {
-    newPlayer(player);
+    await newPlayer(player);
   } else {
     player.load(playerDoc);
     const connected = await checkPassword(player);

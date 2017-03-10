@@ -31,7 +31,7 @@ function default_1(client) {
         const player = new player_1.default(name, client);
         const playerDoc = yield db.findOne(player);
         if (playerDoc === null) {
-            new_player_1.default(player);
+            yield new_player_1.default(player);
         }
         else {
             player.load(playerDoc);

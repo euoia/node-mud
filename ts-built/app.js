@@ -17,9 +17,15 @@ const db = require("./db");
 const world = require("./world");
 const commands = require("./commands");
 const Bluebird = require("bluebird");
+const process = require("process");
 const main = function () {
     return __awaiter(this, void 0, void 0, function* () {
-        yield Bluebird.all([db.connect(), world.load(), commands.load()]);
+        yield Bluebird.all([db.connect(), world.load(), commands.load()])
+            .catch(e => {
+            log.error('Error starting up.');
+            log.error(e);
+            process.exit(1);
+        });
         const server = net.createServer((connection) => {
             log.info(`client connected`);
             const client = new client_1.default(connection);

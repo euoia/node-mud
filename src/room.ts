@@ -1,4 +1,6 @@
 import * as pluralize from 'pluralize';
+import * as _ from 'lodash';
+import Player from './player';
 
 export default class Room {
   _id: string;
@@ -17,29 +19,66 @@ export default class Room {
     }
   }
 
-  tell (message, thisPlayer = null) {
+  tell (message, thisPlayer = null, targetPlayer = null) {
     this.inventory.forEach(i => {
-      if (i === thisPlayer) {
-        let subjectiveMessage = message;
-        subjectiveMessage = message.replace('%tp%', 'You');
+      let subjectiveMessage = message;
+
+      switch (i) {
+      case thisPlayer:
+        if (targetPlayer) {
+          subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
+        }
+
+        subjectiveMessage = subjectiveMessage.replace('%tp%', 'You');
         subjectiveMessage = subjectiveMessage.replace(
           /(\|?)(\w+)(\|)/g,
           match => {
             return match.replace(/\|/g, '');
           },
         );
-        i.tell(subjectiveMessage.replace('%tp%', 'You'));
-      } else {
-        let subjectiveMessage = message;
+        subjectiveMessage = subjectiveMessage.replace('%tp%', 'You');
+        break;
+      case targetPlayer:
+        if (targetPlayer) {
+          subjectiveMessage = subjectiveMessage.replace('%target%', 'You');
+        }
+
+        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
         subjectiveMessage = subjectiveMessage.replace(
           /(\|?)(\w+)(\|)/g,
           match => {
             const word = match.replace(/\|/g, '');
+
+            // TODO: This isn't really a plural, it's verb conjugation but in
+            // practise I can't think of an example where this doesn't work.
             return pluralize.plural(word);
           },
         );
-        i.tell(subjectiveMessage.replace('%tp%', thisPlayer.getProperName()));
+        // TODO
+        break;
+      default:
+        if (targetPlayer) {
+          subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
+        }
+
+        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+        subjectiveMessage = subjectiveMessage.replace(
+          /(\|?)(\w+)(\|)/g,
+          match => {
+            const word = match.replace(/\|/g, '');
+
+            // TODO: This isn't really a plural, it's verb conjugation but in
+            // practise I can't think of an example where this doesn't work.
+            return pluralize.plural(word);
+          },
+        );
       }
+
+      i.tell(subjectiveMessage);
     });
+  }
+
+  getPlayer(name: string): Player {
+    return _.find(this.inventory, {name});
   }
 };

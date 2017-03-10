@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const pluralize = require("pluralize");
+const _ = require("lodash");
 class Room {
     constructor(roomData) {
         this.inventory = [];
@@ -10,25 +11,50 @@ class Room {
             }
         }
     }
-    tell(message, thisPlayer = null) {
+    tell(message, thisPlayer = null, targetPlayer = null) {
         this.inventory.forEach(i => {
-            if (i === thisPlayer) {
-                let subjectiveMessage = message;
-                subjectiveMessage = message.replace('%tp%', 'You');
-                subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
-                    return match.replace(/\|/g, '');
-                });
-                i.tell(subjectiveMessage.replace('%tp%', 'You'));
+            let subjectiveMessage = message;
+            switch (i) {
+                case thisPlayer:
+                    if (targetPlayer) {
+                        subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
+                    }
+                    subjectiveMessage = subjectiveMessage.replace('%tp%', 'You');
+                    subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
+                        return match.replace(/\|/g, '');
+                    });
+                    subjectiveMessage = subjectiveMessage.replace('%tp%', 'You');
+                    break;
+                case targetPlayer:
+                    if (targetPlayer) {
+                        subjectiveMessage = subjectiveMessage.replace('%target%', 'You');
+                    }
+                    subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
+                        const word = match.replace(/\|/g, '');
+                        // TODO: This isn't really a plural, it's verb conjugation but in
+                        // practise I can't think of an example where this doesn't work.
+                        return pluralize.plural(word);
+                    });
+                    // TODO
+                    break;
+                default:
+                    if (targetPlayer) {
+                        subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
+                    }
+                    subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
+                        const word = match.replace(/\|/g, '');
+                        // TODO: This isn't really a plural, it's verb conjugation but in
+                        // practise I can't think of an example where this doesn't work.
+                        return pluralize.plural(word);
+                    });
             }
-            else {
-                let subjectiveMessage = message;
-                subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
-                    const word = match.replace(/\|/g, '');
-                    return pluralize.plural(word);
-                });
-                i.tell(subjectiveMessage.replace('%tp%', thisPlayer.getProperName()));
-            }
+            i.tell(subjectiveMessage);
         });
+    }
+    getPlayer(name) {
+        return _.find(this.inventory, { name });
     }
 }
 exports.default = Room;

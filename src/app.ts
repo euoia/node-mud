@@ -7,9 +7,15 @@ import db = require('./db');
 import world = require('./world');
 import commands = require('./commands');
 import Bluebird = require('bluebird');
+import * as process from 'process';
 
 const main = async function () {
-  await Bluebird.all([db.connect(), world.load(), commands.load()]);
+  await Bluebird.all([db.connect(), world.load(), commands.load()])
+    .catch(e => {
+      log.error('Error starting up.');
+      log.error(e);
+      process.exit(1);
+    });
 
   const server = net.createServer((connection: net.Socket) => {
     log.info(`client connected`);

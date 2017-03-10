@@ -12,8 +12,8 @@ function default_1(player) {
     return __awaiter(this, void 0, void 0, function* () {
         player.tell(`A new player!`);
         // Password.
-        const password = yield player.prompt(`What is your password? `);
-        const passwordConfirm = yield player.prompt(`What is your password (confirm)? `);
+        const password = yield player.promptPassword(`What is your password? `);
+        const passwordConfirm = yield player.promptPassword(`What is your password (confirm)? `);
         if (password !== passwordConfirm) {
             player.tell(`Passwords did not match.`);
             return player.disconnect();

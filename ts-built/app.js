@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("./client");
 const config = require("./config");
-const log = require("./log");
+const log_1 = require("./log");
 const net = require("net");
 const connect_1 = require("./connect");
 const db = require("./db");
@@ -22,30 +22,30 @@ const main = function () {
     return __awaiter(this, void 0, void 0, function* () {
         yield Bluebird.all([db.connect(), world.load(), commands.load()])
             .catch(e => {
-            log.error('Error starting up.');
-            log.error(e);
+            log_1.default.error('Error starting up.');
+            log_1.default.error(e);
             process.exit(1);
         });
         const server = net.createServer((connection) => {
-            log.info(`client connected`);
+            log_1.default.info(`client connected`);
             const client = new client_1.default(connection);
             connection.setEncoding('utf8');
             connection.on('end', () => {
-                log.info(`client disconnected`);
+                log_1.default.info(`client disconnected`);
             });
             try {
                 connect_1.default(client);
             }
             catch (e) {
-                log.error(e.message);
-                log.error(e.stack);
+                log_1.default.error(e.message);
+                log_1.default.error(e.stack);
             }
         });
         server.on('error', (err) => {
             throw err;
         });
         server.listen(config.app.port, () => {
-            log.info('Listening on port', config.app.port);
+            log_1.default.info('Listening on port', config.app.port);
         });
     });
 };

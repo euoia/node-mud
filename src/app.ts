@@ -1,6 +1,6 @@
 import Client from './client';
 import config = require('./config');
-import log = require('./log');
+import log from './log';
 import net = require('net');
 import connect from './connect';
 import db = require('./db');

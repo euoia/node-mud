@@ -4,7 +4,7 @@ import Player from './player';
 import Client from './client';
 import * as world from  './world';
 import newPlayer from './new-player';
-import log = require('./log');
+import log from './log';
 
 const logoPath = './assets/logo.txt';
 

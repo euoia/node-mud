@@ -6,7 +6,7 @@ function zeroPad(num: number, len: number) {
   return (repeat('0', len) + num.toString()).slice(0 - len);
 }
 
-export = new (winston.Logger)({
+export default new (winston.Logger)({
   level: config.log.level,
   transports: [
     new (winston.transports.Console)({

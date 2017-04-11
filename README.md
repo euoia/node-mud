@@ -1,6 +1,6 @@
-# Making a multi-user dungeon in Typescript
+# A multi-user environment in Typescript
 
-Getting my feet wet with Typescript.
+A text-based multi-user environment written in Typescript.
 
 
 ## Configuration

@@ -7,6 +7,11 @@ A text-based multi-user environment written in Typescript.
 
 `cp .env.example .env` and modify as necessary.
 
+## Requirements
+
+A mongo DB instance. Configure the host and port in `.env`.
+
+
 ## Running
 
 Use `npm start` to start, or `npm run watch` to start with nodemon.

@@ -81,6 +81,7 @@ export default class Player {
     await this.client.disableLocalEcho();
     const password = await this.client.getInput() as string;
     await this.client.enableLocalEcho();
+    this.client.write('\n');
 
     return password;
   }

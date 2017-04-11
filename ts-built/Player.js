@@ -75,6 +75,7 @@ class Player {
             yield this.client.disableLocalEcho();
             const password = yield this.client.getInput();
             yield this.client.enableLocalEcho();
+            this.client.write('\n');
             return password;
         });
     }

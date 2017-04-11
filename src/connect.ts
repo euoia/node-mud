@@ -4,6 +4,7 @@ import Player from './player';
 import Client from './client';
 import * as world from  './world';
 import newPlayer from './new-player';
+import log = require('./log');
 
 const logoPath = './assets/logo.txt';
 
@@ -19,7 +20,6 @@ const checkPassword = async (player: Player) => {
   }
 };
 
-
 export default async function (client: Client) {
   client.write(await readLogo());
 
@@ -28,7 +28,13 @@ export default async function (client: Client) {
   const player = new Player(name, client);
   const playerDoc = await db.findOne(player);
   if (playerDoc === null) {
-    await newPlayer(player);
+    try {
+      await newPlayer(player);
+    } catch (e) {
+      log.debug(`Not creating a new player: ${e}`);
+      player.disconnect();
+      return;
+    }
   } else {
     player.load(playerDoc);
     const connected = await checkPassword(player);

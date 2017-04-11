@@ -9,6 +9,12 @@ module.exports = new (winston.Logger)({
     level: config.log.level,
     transports: [
         new (winston.transports.Console)({
+            formatter: function (options) {
+                // Log metadata as stringified objects.
+                const extra = Object.keys(options.meta).length > 0 ?
+                    ` ${JSON.stringify(options.meta)}` : ``;
+                return `${options.timestamp()} - ${options.level.toUpperCase()}: ${options.message}${extra}`;
+            },
             timestamp: function () {
                 const d = new Date();
                 const year = d.getUTCFullYear();
@@ -20,13 +26,7 @@ module.exports = new (winston.Logger)({
                 const milliseconds = zeroPad(d.getUTCMilliseconds(), 3);
                 return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
             },
-            formatter: function (options) {
-                // Log metadata as stringified objects.
-                const extra = Object.keys(options.meta).length > 0 ?
-                    ` ${JSON.stringify(options.meta)}` : ``;
-                return `${options.timestamp()} - ${options.level.toUpperCase()}: ${options.message}${extra}`;
-            }
-        })
-    ]
+        }),
+    ],
 });
 //# sourceMappingURL=log.js.map

@@ -9,7 +9,8 @@ export default async function (player: Player): Promise<void> {
 
   if (password !== passwordConfirm) {
     player.tell(`Passwords did not match.`);
-    return player.disconnect();
+    player.disconnect();
+    throw new Error(`Passwords did not match`);
   }
 
   player.setPassword(password);

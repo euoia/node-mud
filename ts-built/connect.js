@@ -13,6 +13,7 @@ const db = require("./db");
 const player_1 = require("./player");
 const world = require("./world");
 const new_player_1 = require("./new-player");
+const log = require("./log");
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
     return new Promise(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
@@ -31,7 +32,14 @@ function default_1(client) {
         const player = new player_1.default(name, client);
         const playerDoc = yield db.findOne(player);
         if (playerDoc === null) {
-            yield new_player_1.default(player);
+            try {
+                yield new_player_1.default(player);
+            }
+            catch (e) {
+                log.debug(`Not creating a new player: ${e}`);
+                player.disconnect();
+                return;
+            }
         }
         else {
             player.load(playerDoc);

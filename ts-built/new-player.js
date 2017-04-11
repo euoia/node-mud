@@ -16,7 +16,8 @@ function default_1(player) {
         const passwordConfirm = yield player.promptPassword(`What is your password (confirm)? `);
         if (password !== passwordConfirm) {
             player.tell(`Passwords did not match.`);
-            return player.disconnect();
+            player.disconnect();
+            throw new Error(`Passwords did not match`);
         }
         player.setPassword(password);
         // Alignment.

@@ -8,16 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Bluebird = require("bluebird");
+const commands = require("./commands");
+const db = require("./db");
+const net = require("net");
+const process = require("process");
+const world = require("./world");
 const client_1 = require("./client");
 const config_1 = require("./config");
-const log_1 = require("./log");
-const net = require("net");
 const connect_1 = require("./connect");
-const db = require("./db");
-const world = require("./world");
-const commands = require("./commands");
-const Bluebird = require("bluebird");
-const process = require("process");
+const log_1 = require("./log");
 const main = function () {
     return __awaiter(this, void 0, void 0, function* () {
         yield Bluebird.all([db.connect(), world.load(), commands.load()])

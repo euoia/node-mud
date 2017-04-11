@@ -1,5 +1,6 @@
-import * as pluralize from 'pluralize';
 import * as _ from 'lodash';
+import * as pluralize from 'pluralize';
+
 import Player from './player';
 
 export default class Room {

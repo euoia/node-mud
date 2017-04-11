@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const pluralize = require("pluralize");
 const _ = require("lodash");
+const pluralize = require("pluralize");
 class Room {
     constructor(roomData) {
         this.inventory = [];

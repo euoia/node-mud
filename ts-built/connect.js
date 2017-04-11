@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
 const db = require("./db");
-const player_1 = require("./player");
+const fs = require("fs");
 const world = require("./world");
-const new_player_1 = require("./new-player");
+const player_1 = require("./player");
 const log_1 = require("./log");
+const new_player_1 = require("./new-player");
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
     return new Promise(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));

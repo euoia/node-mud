@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = require("crypto");
-const config_1 = require("./config");
-const commands = require("./commands");
-const alias_1 = require("./alias");
-const _ = require("lodash");
 const db = require("./db");
 const world = require("./world");
+const alias_1 = require("./alias");
+const config_1 = require("./config");
+const commands = require("./commands");
+const _ = require("lodash");
 class Player {
     constructor(name, client) {
         this.name = name;

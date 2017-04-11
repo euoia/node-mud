@@ -1,5 +1,6 @@
-import Player from '../player';
 import * as world from '../world';
+
+import Player from '../player';
 
 export function match(command: string) {
   return command.split(' ')[0] === 'tell';

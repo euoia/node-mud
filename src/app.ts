@@ -1,13 +1,14 @@
+import * as Bluebird from 'bluebird';
+import * as commands from './commands';
+import * as db from './db';
+import * as net from 'net';
+import * as process from 'process';
+import * as world from './world';
+
 import Client from './client';
 import config from './config';
-import log from './log';
-import net = require('net');
 import connect from './connect';
-import db = require('./db');
-import world = require('./world');
-import commands = require('./commands');
-import Bluebird = require('bluebird');
-import * as process from 'process';
+import log from './log';
 
 const main = async function () {
   await Bluebird.all([db.connect(), world.load(), commands.load()])

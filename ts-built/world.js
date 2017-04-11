@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const path = require("path");
-const fs = require("fs");
 const Bluebird = require("bluebird");
+const _ = require("lodash");
+const fs = require("fs");
+const path = require("path");
 const yaml = require("js-yaml");
 const room_1 = require("./room");
-const _ = require("lodash");
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';

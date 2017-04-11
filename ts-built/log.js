@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("./config");
-const winston = require("winston");
 const repeat = require("repeat-string");
+const winston = require("winston");
+const config_1 = require("./config");
 function zeroPad(num, len) {
     return (repeat('0', len) + num.toString()).slice(0 - len);
 }

@@ -1,4 +1,4 @@
-import net = require('net');
+import * as net from 'net';
 
 export default class Client {
   constructor (public connection: net.Socket) {

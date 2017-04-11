@@ -8,9 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Bluebird = require("bluebird");
 const fs = require("fs");
 const path = require("path");
-const Bluebird = require("bluebird");
 const world = require("./world");
 const commandsPath = path.join(__dirname, 'commands');
 const commands = [];

@@ -1,10 +1,11 @@
-import fs = require('fs');
 import * as db from './db';
-import Player from './player';
-import Client from './client';
+import * as fs from 'fs';
 import * as world from  './world';
-import newPlayer from './new-player';
+
+import Client from './client';
+import Player from './player';
 import log from './log';
+import newPlayer from './new-player';
 
 const logoPath = './assets/logo.txt';
 

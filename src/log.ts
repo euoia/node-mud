@@ -1,6 +1,7 @@
-import config from './config';
-import winston = require('winston');
 import repeat = require('repeat-string');
+import * as winston from 'winston';
+
+import config from './config';
 
 function zeroPad(num: number, len: number) {
   return (repeat('0', len) + num.toString()).slice(0 - len);

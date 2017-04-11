@@ -1,10 +1,11 @@
-import path = require('path');
-import fs = require('fs');
-import Bluebird = require('bluebird');
-import yaml = require('js-yaml');
+import * as Bluebird from 'bluebird';
+import * as _ from 'lodash';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as yaml from 'js-yaml';
+
 import Player from './player';
 import Room from './room';
-import * as _ from 'lodash';
 
 const roomsPath = 'rooms';
 const goodStart = 'good-church';

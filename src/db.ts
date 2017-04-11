@@ -1,8 +1,9 @@
+import * as Bluebird from 'bluebird';
+import * as _ from 'lodash';
 ///<reference path='../interfaces/Persistable.d.ts'/>
-import mongodb = require('mongodb');
+import * as mongodb from 'mongodb';
+
 import config from './config';
-import Bluebird = require('bluebird');
-import _ = require('lodash');
 
 const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
 let db = null;

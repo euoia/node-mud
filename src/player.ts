@@ -1,12 +1,14 @@
-import crypto = require('crypto');
-import Client from './client';
-import config from './config';
-import commands = require('./commands');
-import Alias from './alias';
-import _ = require('lodash');
+import * as crypto from 'crypto';
 import * as db from './db';
 import * as world from './world';
+
+import Alias from './alias';
+import Client from './client';
 import Room from './room';
+import config from './config';
+
+import commands = require('./commands');
+import _ = require('lodash');
 
 export default class Player {
   _id: string;

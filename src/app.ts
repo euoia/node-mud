@@ -1,5 +1,5 @@
 import Client from './client';
-import config = require('./config');
+import config from './config';
 import log from './log';
 import net = require('net');
 import connect from './connect';

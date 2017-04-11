@@ -1,4 +1,4 @@
-import config = require('./config');
+import config from './config';
 import winston = require('winston');
 import repeat = require('repeat-string');
 

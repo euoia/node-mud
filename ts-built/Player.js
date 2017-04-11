@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto = require("crypto");
-const config = require("./config");
+const config_1 = require("./config");
 const commands = require("./commands");
 const alias_1 = require("./alias");
 const _ = require("lodash");
@@ -39,7 +39,7 @@ class Player {
     }
     setPassword(password) {
         this.password = crypto
-            .createHmac('sha1', this.salt + config.app.secret)
+            .createHmac('sha1', this.salt + config_1.default.app.secret)
             .update(password)
             .digest('hex');
     }
@@ -48,7 +48,7 @@ class Player {
      */
     checkPassword(password) {
         const hashed = crypto
-            .createHmac('sha1', this.salt + config.app.secret)
+            .createHmac('sha1', this.salt + config_1.default.app.secret)
             .update(password)
             .digest('hex');
         return hashed === this.password;

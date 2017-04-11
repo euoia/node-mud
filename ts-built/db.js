@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='../interfaces/Persistable.d.ts'/>
 const mongodb = require("mongodb");
-const config = require("./config");
+const config_1 = require("./config");
 const Bluebird = require("bluebird");
 const _ = require("lodash");
-const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
+const url = `mongodb://${config_1.default.mongo.host}:${config_1.default.mongo.port}/node-mud`;
 let db = null;
 const checkConnection = () => {
     if (db === null) {

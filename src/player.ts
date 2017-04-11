@@ -1,6 +1,6 @@
 import crypto = require('crypto');
 import Client from './client';
-import config = require('./config');
+import config from './config';
 import commands = require('./commands');
 import Alias from './alias';
 import _ = require('lodash');

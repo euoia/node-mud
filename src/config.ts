@@ -2,7 +2,7 @@ import dotenv = require('dotenv');
 
 dotenv.config();
 
-export = {
+export default {
   app: {
     port: process.env.APP_PORT,
     secret: process.env.APP_SECRET,

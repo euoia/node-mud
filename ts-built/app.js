@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("./client");
-const config = require("./config");
+const config_1 = require("./config");
 const log_1 = require("./log");
 const net = require("net");
 const connect_1 = require("./connect");
@@ -44,8 +44,8 @@ const main = function () {
         server.on('error', (err) => {
             throw err;
         });
-        server.listen(config.app.port, () => {
-            log_1.default.info('Listening on port', config.app.port);
+        server.listen(config_1.default.app.port, () => {
+            log_1.default.info('Listening on port', config_1.default.app.port);
         });
     });
 };

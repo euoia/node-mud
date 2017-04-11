@@ -1,6 +1,6 @@
 ///<reference path='../interfaces/Persistable.d.ts'/>
 import mongodb = require('mongodb');
-import config = require('./config');
+import config from './config';
 import Bluebird = require('bluebird');
 import _ = require('lodash');
 

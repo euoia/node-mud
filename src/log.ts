@@ -1,17 +1,15 @@
-import repeat = require('repeat-string');
 import * as winston from 'winston';
-
 import config from './config';
 
 function zeroPad(num: number, len: number) {
-  return (repeat('0', len) + num.toString()).slice(0 - len);
+  return ('0'.repeat(len) + num.toString()).slice(0 - len);
 }
 
 export default new (winston.Logger)({
   level: config.log.level,
   transports: [
     new (winston.transports.Console)({
-      formatter: function(options) {
+      formatter: function(options:any) {
         // Log metadata as stringified objects.
         const extra = Object.keys(options.meta).length > 0 ?
           ` ${JSON.stringify(options.meta)}` : ``;

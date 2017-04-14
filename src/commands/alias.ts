@@ -1,10 +1,10 @@
 import Player from '../player';
 
-export function match(command: string) {
+export function match(command: string): boolean {
   return command.split(' ')[0] === 'alias';
 }
 
-export async function handle(args: string, player: Player, fail: Function) {
+export async function handle(args: string, player: Player, fail: Function): Promise<boolean> {
   const words = args.split(' ');
   if (words.length < 3) {
     player.tell(`Usage: alias <alias> <command>`);

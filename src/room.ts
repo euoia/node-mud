@@ -8,19 +8,22 @@ export default class Room {
   short: string;
   long: string;
   inventory: any[];
-  exits: object[];
+  exits: Map<string, string>;
 
-  constructor (roomData) {
+  constructor (roomData:any) {
     this.inventory = [];
+    this.short = roomData.short;
+    this.long = roomData.long;
 
-    for (let prop in roomData) {
-      if (roomData.hasOwnProperty(prop)) {
-        this[prop] = roomData[prop];
-      }
+    const roomExits = roomData.exits || {};
+
+    this.exits = new Map();
+    for (const exitText of Object.keys(roomExits)) {
+      this.exits.set(exitText, roomExits[exitText])
     }
   }
 
-  tell (message, thisPlayer = null, targetPlayer = null) {
+  tell (message:string, thisPlayer?:Player, targetPlayer?:Player) {
     this.inventory.forEach(i => {
       let subjectiveMessage = message;
 
@@ -44,7 +47,10 @@ export default class Room {
           subjectiveMessage = subjectiveMessage.replace('%target%', 'You');
         }
 
-        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+        if (thisPlayer) {
+          subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+        }
+
         subjectiveMessage = subjectiveMessage.replace(
           /(\|?)(\w+)(\|)/g,
           match => {
@@ -62,7 +68,10 @@ export default class Room {
           subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
         }
 
-        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+        if (thisPlayer) {
+          subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+        }
+
         subjectiveMessage = subjectiveMessage.replace(
           /(\|?)(\w+)(\|)/g,
           match => {
@@ -81,5 +90,18 @@ export default class Room {
 
   getPlayer(name: string): Player {
     return _.find(this.inventory, {name});
+  }
+
+  getExit(exitText: string): string | undefined {
+    return this.exits.get(exitText);
+  }
+
+  getExits(): string[] {
+    let exits = new Array<string>();
+    for (let exit of this.exits) {
+      exits.push(exit[0]);
+    }
+
+    return exits;
   }
 };

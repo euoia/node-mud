@@ -1,14 +1,14 @@
 import * as Bluebird from 'bluebird';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import Command from './command';
 import Player from './player';
 
 import world = require('./world');
 
 const commandsPath = path.join(__dirname, 'commands');
 
-const commands = [];
+const commands = new Array<Command>();
 
 export async function load () {
   const readdirAsync = Bluebird.promisify(fs.readdir);
@@ -30,7 +30,7 @@ export async function handle(command: string, player: Player) {
   console.log(`received command`, command, `from`, player.name);
 
   let failMessage = `What?`;
-  const fail = failString => {
+  const fail = (failString:string) => {
     failMessage = failString;
   };
 

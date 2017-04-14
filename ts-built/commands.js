@@ -13,7 +13,7 @@ const fs = require("fs");
 const path = require("path");
 const world = require("./world");
 const commandsPath = path.join(__dirname, 'commands');
-const commands = [];
+const commands = new Array();
 function load() {
     return __awaiter(this, void 0, void 0, function* () {
         const readdirAsync = Bluebird.promisify(fs.readdir);
@@ -33,7 +33,7 @@ function handle(command, player) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(`received command`, command, `from`, player.name);
         let failMessage = `What?`;
-        const fail = failString => {
+        const fail = (failString) => {
             failMessage = failString;
         };
         // Try all commands.

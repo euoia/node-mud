@@ -8,16 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const world = require("./world");
 function default_1(player) {
     return __awaiter(this, void 0, void 0, function* () {
         player.tell(`A new player!`);
         // Password.
-        const password = yield player.prompt(`What is your password? `);
-        const passwordConfirm = yield player.prompt(`What is your password (confirm)? `);
+        const password = yield player.promptPassword(`What is your password? `);
+        const passwordConfirm = yield player.promptPassword(`What is your password (confirm)? `);
         if (password !== passwordConfirm) {
             player.tell(`Passwords did not match.`);
-            return player.disconnect();
+            player.disconnect();
+            throw new Error(`Passwords did not match`);
         }
         player.setPassword(password);
         // Alignment.
@@ -28,7 +28,6 @@ function default_1(player) {
         }
         player.alignment = alignment;
         yield player.save();
-        yield world.gameLoop(player);
     });
 }
 exports.default = default_1;

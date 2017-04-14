@@ -2,8 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitAny": true,
     "target":  "es6",
     "sourceMap": true,
+    "strictNullChecks": true,
     "outDir": "ts-built"
   },
   "exclude": [

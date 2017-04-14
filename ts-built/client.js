@@ -15,7 +15,7 @@ class Client {
     write(text) {
         return __awaiter(this, void 0, void 0, function* () {
             return new Promise(resolve => {
-                this.connection.write(text, null, resolve);
+                this.connection.write(text, undefined, resolve);
             });
         });
     }
@@ -40,7 +40,7 @@ class Client {
             const m = [0xFF, 0xFB, 0x01]; // IAC WILL ECHO
             const message = new Buffer(m);
             return new Promise(resolve => {
-                this.connection.write(message, null, () => {
+                this.connection.write(message, undefined, () => {
                     // For some reason enabling and disabling local echo puts junk in the pipe.
                     this.getInput().then(resolve);
                 });
@@ -52,7 +52,7 @@ class Client {
             const m = [0xFF, 0xFC, 0x01]; // IAC WONT ECHO
             const message = new Buffer(m);
             return new Promise(resolve => {
-                this.connection.write(message, null, () => {
+                this.connection.write(message, undefined, () => {
                     // For some reason enabling and disabling local echo puts junk in the pipe.
                     this.getInput().then(resolve);
                 });

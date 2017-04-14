@@ -8,16 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const path = require("path");
-const fs = require("fs");
 const Bluebird = require("bluebird");
+const _ = require("lodash");
+const fs = require("fs");
+const path = require("path");
 const yaml = require("js-yaml");
 const room_1 = require("./room");
-const _ = require("lodash");
 const roomsPath = 'rooms';
 const goodStart = 'good-church';
 const evilStart = 'evil-church';
 const rooms = new Map();
+const players = new Array();
 const exitDirections = ['north', 'south', 'east', 'west', 'northeast',
     'southeast', 'southwest', 'northwest'];
 function load() {
@@ -40,7 +41,7 @@ const getPlayerStartingRoom = (player) => {
     return player.alignment === 'evil' ? evilStart : goodStart;
 };
 const updatePlayerRoom = (player) => {
-    if (rooms.has(player.roomID) === false) {
+    if (rooms.has(player.roomID) === false || player.roomID === undefined) {
         player.roomID = getPlayerStartingRoom(player);
     }
     if (rooms.has(player.roomID) === false) {
@@ -71,10 +72,9 @@ function gameLoop(player) {
     });
 }
 exports.gameLoop = gameLoop;
-;
 function leaveRoom(player) {
     _.pull(rooms.get(player.roomID).inventory, player);
-    player.roomID = null;
+    player.roomID = undefined;
 }
 function enterRoom(player, roomID) {
     player.roomID = roomID;
@@ -99,8 +99,8 @@ function look(player) {
     player.tell(`There ${isAre} ${numExits} obvious ${exitExits}${exitsStr}`);
     // Inventory.
     room.inventory
-        .filter(i => i !== player)
-        .forEach(i => player.tell(i.getShort(player)));
+        .filter((i) => i !== player)
+        .forEach((i) => player.tell(i.getShort(player)));
 }
 exports.look = look;
 function handleCommand(command, player, fail) {
@@ -120,4 +120,16 @@ function getRoomByID(roomID) {
     return rooms.get(roomID);
 }
 exports.getRoomByID = getRoomByID;
+function addPlayer(player) {
+    players.push(player);
+}
+exports.addPlayer = addPlayer;
+function removePlayer(player) {
+    _.pull(players, player);
+}
+exports.removePlayer = removePlayer;
+function getPlayerByName(playerName) {
+    return _.find(players, { name: playerName });
+}
+exports.getPlayerByName = getPlayerByName;
 //# sourceMappingURL=world.js.map

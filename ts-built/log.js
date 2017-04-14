@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const repeat = require("repeat-string");
 const winston = require("winston");
 const config_1 = require("./config");
 function zeroPad(num, len) {
-    return (repeat('0', len) + num.toString()).slice(0 - len);
+    return ('0'.repeat(len) + num.toString()).slice(0 - len);
 }
 exports.default = new (winston.Logger)({
     level: config_1.default.log.level,

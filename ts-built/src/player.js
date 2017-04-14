@@ -8,38 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-///<reference path='../interfaces/Tellable.d.ts'/>
 const crypto = require("crypto");
-const config = require("./config");
-const commands = require("./commands");
-const alias_1 = require("./alias");
-const _ = require("lodash");
 const db = require("./db");
 const world = require("./world");
+const alias_1 = require("./alias");
+const config_1 = require("./config");
+const commands = require("./commands");
+const _ = require("lodash");
 class Player {
     constructor(name, client) {
         this.name = name;
         this.client = client;
         this.collection = 'players';
         this.keys = 'name';
-        this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases'];
+        this.props = ['name', 'salt', 'password', 'alignment', 'roomID', 'aliases', 'replyName'];
         this.salt = crypto.randomBytes(64).toString('hex');
         this.aliases = [];
         this.hasQuit = false;
+        this.replyName = undefined;
     }
     // Load from a mongodb document.
     load(doc) {
         this.props.forEach(prop => {
             // Filter out properties that weren't saved. This allows us to add new
             // properties.
-            if (doc[prop] !== undefined) {
+            if (doc[prop] !== undefined && this.hasOwnProperty(prop)) {
                 this[prop] = doc[prop];
             }
         });
     }
     setPassword(password) {
         this.password = crypto
-            .createHmac('sha1', this.salt + config.app.secret)
+            .createHmac('sha1', this.salt + config_1.default.app.secret)
             .update(password)
             .digest('hex');
     }
@@ -48,7 +48,7 @@ class Player {
      */
     checkPassword(password) {
         const hashed = crypto
-            .createHmac('sha1', this.salt + config.app.secret)
+            .createHmac('sha1', this.salt + config_1.default.app.secret)
             .update(password)
             .digest('hex');
         return hashed === this.password;
@@ -75,6 +75,7 @@ class Player {
             yield this.client.disableLocalEcho();
             const password = yield this.client.getInput();
             yield this.client.enableLocalEcho();
+            this.client.write('\n');
             return password;
         });
     }
@@ -83,7 +84,7 @@ class Player {
             const input = yield this.prompt(`$ `);
             console.log(`got input ${input}`);
             const substitutedInput = this.substituteAlias(input);
-            yield commands.handle(substitutedInput, this);
+            yield this.command(substitutedInput);
         });
     }
     disconnect() {
@@ -123,7 +124,15 @@ class Player {
         return `${this.getProperName()} [${this.alignment}]`;
     }
     getRoom() {
+        if (this.roomID === undefined) {
+            return undefined;
+        }
         return world.getRoomByID(this.roomID);
+    }
+    command(command) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield commands.handle(command, this);
+        });
     }
 }
 exports.default = Player;

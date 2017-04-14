@@ -1,4 +1,5 @@
 "use strict";
+///<reference path='../interfaces/Persistable.d.ts'/>
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -10,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bluebird = require("bluebird");
 const _ = require("lodash");
-///<reference path='../interfaces/Persistable.d.ts'/>
 const mongodb = require("mongodb");
 const config_1 = require("./config");
 const url = `mongodb://${config_1.default.mongo.host}:${config_1.default.mongo.port}/node-mud`;
@@ -28,7 +28,7 @@ function connect() {
                     return reject(err);
                 }
                 db = database;
-                return resolve(null);
+                return resolve({});
             });
         });
     });

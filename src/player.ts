@@ -11,6 +11,8 @@ import commands = require('./commands');
 import _ = require('lodash');
 
 export default class Player {
+  // This allows the loading from document. It's also a bit gross.
+  [key: string]: any;
   _id: string;
   aliases: Alias[];
   collection: string;
@@ -21,7 +23,7 @@ export default class Player {
   alignment: string;
   roomID: string;
   hasQuit: boolean;
-  replyName: string;
+  replyName?: string;
 
   constructor (public name: string, public client: Client) {
     this.collection = 'players';
@@ -30,15 +32,15 @@ export default class Player {
     this.salt = crypto.randomBytes(64).toString('hex');
     this.aliases = [];
     this.hasQuit = false;
-    this.replyName = null;
+    this.replyName = undefined;
   }
 
   // Load from a mongodb document.
-  load (doc) {
+  load (doc:any) {
     this.props.forEach(prop => {
       // Filter out properties that weren't saved. This allows us to add new
       // properties.
-      if (doc[prop] !== undefined) {
+      if (doc[prop] !== undefined && this.hasOwnProperty(prop)) {
         this[prop] = doc[prop];
       }
     });
@@ -139,10 +141,10 @@ export default class Player {
   }
 
   getRoom(): Room {
-    return world.getRoomByID(this.roomID);
+    return world.getPlayerRoom(this);
   }
 
-  async command(command) {
+  async command(command:string) {
     await commands.handle(command, this);
   }
 };

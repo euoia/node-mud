@@ -5,13 +5,15 @@ const pluralize = require("pluralize");
 class Room {
     constructor(roomData) {
         this.inventory = [];
-        for (let prop in roomData) {
-            if (roomData.hasOwnProperty(prop)) {
-                this[prop] = roomData[prop];
-            }
+        this.short = roomData.short;
+        this.long = roomData.long;
+        const roomExits = roomData.exits || {};
+        this.exits = new Map();
+        for (const exitText of Object.keys(roomExits)) {
+            this.exits.set(exitText, roomExits[exitText]);
         }
     }
-    tell(message, thisPlayer = null, targetPlayer = null) {
+    tell(message, thisPlayer, targetPlayer) {
         this.inventory.forEach(i => {
             let subjectiveMessage = message;
             switch (i) {
@@ -29,7 +31,9 @@ class Room {
                     if (targetPlayer) {
                         subjectiveMessage = subjectiveMessage.replace('%target%', 'You');
                     }
-                    subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    if (thisPlayer) {
+                        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    }
                     subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
                         const word = match.replace(/\|/g, '');
                         // TODO: This isn't really a plural, it's verb conjugation but in
@@ -42,7 +46,9 @@ class Room {
                     if (targetPlayer) {
                         subjectiveMessage = subjectiveMessage.replace('%target%', targetPlayer.getProperName());
                     }
-                    subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    if (thisPlayer) {
+                        subjectiveMessage = subjectiveMessage.replace('%tp%', thisPlayer.getProperName());
+                    }
                     subjectiveMessage = subjectiveMessage.replace(/(\|?)(\w+)(\|)/g, match => {
                         const word = match.replace(/\|/g, '');
                         // TODO: This isn't really a plural, it's verb conjugation but in
@@ -55,6 +61,16 @@ class Room {
     }
     getPlayer(name) {
         return _.find(this.inventory, { name });
+    }
+    getExit(exitText) {
+        return this.exits.get(exitText);
+    }
+    getExits() {
+        let exits = new Array();
+        for (let exit of this.exits) {
+            exits.push(exit[0]);
+        }
+        return exits;
     }
 }
 exports.default = Room;

@@ -8,23 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
-const Bluebird = require("bluebird");
 const db = require("./db");
-const player_1 = require("./player");
+const fs = require("fs");
 const world = require("./world");
+const player_1 = require("./player");
+const log_1 = require("./log");
 const new_player_1 = require("./new-player");
 const logoPath = './assets/logo.txt';
 const readLogo = () => __awaiter(this, void 0, void 0, function* () {
-    return new Bluebird(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
+    return new Promise(resolve => fs.readFile(logoPath, (err, file) => resolve(file.toString())));
 });
-const existingPlayer = (player) => __awaiter(this, void 0, void 0, function* () {
+const checkPassword = (player) => __awaiter(this, void 0, void 0, function* () {
     const password = yield player.promptPassword('What is your password? ');
     if (player.checkPassword(password) === false) {
         player.tell(`Incorrect password.`);
-        return player.disconnect();
+        return false;
     }
-    yield world.gameLoop(player);
 });
 function default_1(client) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -33,10 +32,26 @@ function default_1(client) {
         const player = new player_1.default(name, client);
         const playerDoc = yield db.findOne(player);
         if (playerDoc === null) {
-            return new_player_1.default(player);
+            try {
+                yield new_player_1.default(player);
+            }
+            catch (e) {
+                log_1.default.debug(`Not creating a new player: ${e}`);
+                player.disconnect();
+                return;
+            }
         }
-        player.load(playerDoc);
-        return existingPlayer(player);
+        else {
+            player.load(playerDoc);
+            const connected = yield checkPassword(player);
+            if (connected === false) {
+                player.disconnect();
+                return;
+            }
+        }
+        world.addPlayer(player);
+        yield world.gameLoop(player);
+        world.removePlayer(player);
     });
 }
 exports.default = default_1;

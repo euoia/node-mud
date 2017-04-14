@@ -8,21 +8,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const world = require("../world");
 function match(command) {
-    return command.split(' ')[0] === 'say';
+    return command.split(' ')[0] === 'tell';
 }
 exports.match = match;
 function handle(args, player, fail) {
     return __awaiter(this, void 0, void 0, function* () {
         const words = args.split(' ');
-        if (words.length < 2) {
-            player.tell(`Usage: say <message>`);
+        if (words.length < 3) {
+            player.tell(`Usage: alias <player> <message>`);
             return true;
         }
-        const message = words.splice(1).join(' ');
-        player.getRoom().tell(`%tp% |say|: ${message}`, player);
+        const targetName = words[1];
+        const message = words.splice(2).join(' ');
+        const target = world.getPlayerByName(targetName);
+        if (target === undefined) {
+            player.tell(`Can't find ${targetName}.`);
+            return true;
+        }
+        if (target === player) {
+            player.tell(`You mumble awkwardly to yourself.`);
+            return true;
+        }
+        target.replyName = player.name;
+        target.tell(`${player.getProperName()} tells you: ${message}`);
+        player.tell(`You tell ${target.getProperName()}: ${message}`);
         return true;
     });
 }
 exports.handle = handle;
-//# sourceMappingURL=say.js.map
+//# sourceMappingURL=tell.js.map

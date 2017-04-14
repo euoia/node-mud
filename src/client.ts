@@ -4,9 +4,9 @@ export default class Client {
   constructor (public connection: net.Socket) {
   }
 
-  async write (text) {
+  async write (text: string) {
     return new Promise(resolve => {
-      this.connection.write(text, null, resolve);
+      this.connection.write(text, undefined, resolve);
     });
   }
 
@@ -19,7 +19,7 @@ export default class Client {
     });
   }
 
-  async prompt (input): Promise<string> {
+  async prompt (input: string): Promise<string> {
     await this.write(input);
     return await this.getInput() as string;
   }
@@ -28,7 +28,7 @@ export default class Client {
     const m = [0xFF, 0xFB, 0x01]; // IAC WILL ECHO
     const message = new Buffer(m);
     return new Promise(resolve => {
-      this.connection.write(message, null, () => {
+      this.connection.write(message, undefined, () => {
         // For some reason enabling and disabling local echo puts junk in the pipe.
         this.getInput().then(resolve);
       });
@@ -39,7 +39,7 @@ export default class Client {
     const m = [0xFF, 0xFC, 0x01]; // IAC WONT ECHO
     const message = new Buffer(m);
     return new Promise(resolve => {
-      this.connection.write(message, null, () => {
+      this.connection.write(message, undefined, () => {
         // For some reason enabling and disabling local echo puts junk in the pipe.
         this.getInput().then(resolve);
       });

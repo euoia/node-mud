@@ -1,12 +1,13 @@
+///<reference path='../interfaces/Persistable.d.ts'/>
+
 import * as Bluebird from 'bluebird';
 import * as _ from 'lodash';
-///<reference path='../interfaces/Persistable.d.ts'/>
 import * as mongodb from 'mongodb';
 
 import config from './config';
 
 const url = `mongodb://${config.mongo.host}:${config.mongo.port}/node-mud`;
-let db = null;
+let db:any = null;
 
 const checkConnection = () => {
   if (db === null) {
@@ -14,12 +15,12 @@ const checkConnection = () => {
   }
 };
 
-export async function connect () {
+export async function connect (): Promise<any> {
   return new Bluebird((resolve, reject) => {
-    mongodb.MongoClient.connect(url, (err, database) => {
+    mongodb.MongoClient.connect(url, (err:Error, database) => {
       if (err) { return reject(err); }
       db = database;
-      return resolve(null);
+      return resolve({});
     });
   });
 }
@@ -27,7 +28,7 @@ export async function connect () {
 export async function collection (collection: string) {
   checkConnection();
   return new Bluebird<mongodb.Collection>((resolve, reject) => {
-    db.collection(collection, (err, c) => {
+    db.collection(collection, (err:Error, c:any) => {
       if (err) { return reject(err); }
       return resolve(c);
     });
@@ -57,7 +58,7 @@ export async function save(obj: Persistable) {
   });
 }
 
-export async function findOne(obj: Persistable) {
+export async function findOne(obj: Persistable): Promise<any> {
   checkConnection();
   const col = await collection(obj.collection);
 

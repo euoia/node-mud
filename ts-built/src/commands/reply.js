@@ -9,20 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 function match(command) {
-    return command.split(' ')[0] === 'say';
+    return command.split(' ')[0] === 'reply';
 }
 exports.match = match;
 function handle(args, player, fail) {
     return __awaiter(this, void 0, void 0, function* () {
         const words = args.split(' ');
         if (words.length < 2) {
-            player.tell(`Usage: say <message>`);
+            player.tell(`Usage: reply <message>`);
             return true;
         }
-        const message = words.splice(1).join(' ');
-        player.getRoom().tell(`%tp% |say|: ${message}`, player);
+        if (player.replyName === null) {
+            player.tell(`You have nobody to reply to.`);
+            return true;
+        }
+        player.command(args.replace(/reply/, `tell ${player.replyName}`));
         return true;
     });
 }
 exports.handle = handle;
-//# sourceMappingURL=say.js.map
+//# sourceMappingURL=reply.js.map

@@ -17,13 +17,19 @@
     "lodash": "^4.11.2",
     "mongodb": "^2.1.18",
     "pluralize": "^4.0.0",
-    "repeat-string": "^1.5.4",
     "telnet": "0.0.1"
   },
   "devDependencies": {
+    "@types/bluebird": "^3.5.2",
+    "@types/dotenv": "^2.0.20",
+    "@types/js-yaml": "^3.5.29",
+    "@types/lodash": "^4.14.62",
+    "@types/mongodb": "^2.1.43",
+    "@types/pluralize": "0.0.27",
+    "@types/winston": "^2.3.0",
     "eslint": "^2.4.0",
     "nodemon": "^1.9.1",
-    "tslint": "^4.5.1",
+    "tslint": "^5.1.0",
     "typescript": "^2.2.1",
     "winston": "^2.2.0"
   },

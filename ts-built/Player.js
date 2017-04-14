@@ -25,14 +25,14 @@ class Player {
         this.salt = crypto.randomBytes(64).toString('hex');
         this.aliases = [];
         this.hasQuit = false;
-        this.replyName = null;
+        this.replyName = undefined;
     }
     // Load from a mongodb document.
     load(doc) {
         this.props.forEach(prop => {
             // Filter out properties that weren't saved. This allows us to add new
             // properties.
-            if (doc[prop] !== undefined) {
+            if (doc[prop] !== undefined && this.hasOwnProperty(prop)) {
                 this[prop] = doc[prop];
             }
         });
@@ -124,7 +124,7 @@ class Player {
         return `${this.getProperName()} [${this.alignment}]`;
     }
     getRoom() {
-        return world.getRoomByID(this.roomID);
+        return world.getPlayerRoom(this);
     }
     command(command) {
         return __awaiter(this, void 0, void 0, function* () {
